@@ -11,6 +11,14 @@
   margin: 0;
   position: absolute;
   top: 15px;
+  font-family: "Cabinet Grotesk", sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 20px;
+  background-color: #fff;
+  padding: 2px 12px;
+  border-radius: 4px;
+  opacity: 0.6;
 }
 
 .card__image {
