@@ -37,3 +37,23 @@
   object-fit: cover;
   object-position: center;
 }
+
+.modal__footer {
+  padding: 20px 0 68px 32px;
+}
+
+.modal__caption {
+  font-family: "Cabinet Grotesk", sans-serif;
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 24px;
+  margin: 0;
+}
+
+.modal__weather {
+  font-family: "Cabinet Grotesk", sans-serif;
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 24px;
+  margin: 12px 0 0;
+}
