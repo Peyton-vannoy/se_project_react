@@ -1,5 +1,5 @@
 import "./ItemModal.css";
-import closeIcon from "../../images/modal-close-btn.svg";
+import closeitemIcon from "../../images/item-modal-close-btn.svg";
 
 function ItemModal({ activeModal, onClose, card }) {
   return (
@@ -7,7 +7,11 @@ function ItemModal({ activeModal, onClose, card }) {
       <div className="modal__container modal__container_type_image">
         <div className="modal__content modal__content_type_image">
           <button onClick={onClose} type="button" className="modal__close">
-            <img src={closeIcon} alt="Close" className="modal__close-image" />
+            <img
+              src={closeitemIcon}
+              alt="Close"
+              className="modal__close-image"
+            />
           </button>
           <img src={card.link} alt={card.name} className="modal__image" />
           <div className="modal__footer">
