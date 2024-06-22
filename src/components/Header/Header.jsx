@@ -1,6 +1,6 @@
 import "./Header.css";
-import headerlogo from "../../images/header-logo.svg";
-import profilepicture from "../../images/profile-picture.jpg";
+import headerLogo from "../../images/header-logo.svg";
+import profilePicture from "../../images/profile-picture.jpg";
 
 function Header({ handleAddClick, weatherData }) {
   const currentDate = new Date().toLocaleString("default", {
@@ -9,7 +9,7 @@ function Header({ handleAddClick, weatherData }) {
   });
   return (
     <header className="header">
-      <img src={headerlogo} alt="Logo" className="header__logo" />
+      <img src={headerLogo} alt="Logo" className="header__logo" />
       <p className="header__date-and-location">
         {currentDate}, {weatherData.city}
       </p>
@@ -23,7 +23,7 @@ function Header({ handleAddClick, weatherData }) {
       <div className="header__user-container">
         <p className="header__username">Peyton Vannoy</p>
         <img
-          src={profilepicture}
+          src={profilePicture}
           alt="Peyton Vannoy"
           className="header__profile-picture"
         />

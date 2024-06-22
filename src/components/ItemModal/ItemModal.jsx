@@ -1,14 +1,14 @@
 import "./ItemModal.css";
-import closeitemIcon from "../../images/item-modal-close-btn.svg";
+import closeItemIcon from "../../images/item-modal-close-btn.svg";
 
-function ItemModal({ activeModal, onClose, card }) {
+function ItemModal({ onClose, card, isOpen }) {
   return (
-    <div className={`modal ${activeModal === "preview" ? "modal_opened" : ""}`}>
+    <div className={`modal ${isOpen ? "modal_opened" : ""}`}>
       <div className="modal__container modal__container_type_image">
         <div className="modal__content modal__content_type_image">
           <button onClick={onClose} type="button" className="modal__close">
             <img
-              src={closeitemIcon}
+              src={closeItemIcon}
               alt="Close"
               className="modal__close-image"
             />
