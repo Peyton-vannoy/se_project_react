@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import "./App.css";
 import { coordinates, APIkey } from "../../utils/constants";
 import Header from "../Header/Header";
@@ -7,9 +7,11 @@ import Main from "../Main/Main";
 import ItemModal from "../ItemModal/ItemModal";
 import Footer from "../Footer/Footer";
 import Profile from "../Profile/Profile";
+import AddItemModal from "../../AddItemModal/AddItemModal";
+import DeleteConfirmModal from "../DeleteConfirmModal/DeleteConfirmModal";
 import { filterWeatherData, getWeather } from "../../utils/weatherApi";
 import { CurrentTemperatureUnitContext } from "../../contexts/CurrentTemperatureUnitContext";
-import AddItemModal from "../../AddItemModal/AddItemModal";
+import { getItems, addItem, deleteItem } from "../../utils/api";
 
 function App() {
   const [weatherData, setWeatherData] = useState({
@@ -20,6 +22,7 @@ function App() {
   const [activeModal, setActiveModal] = useState("");
   const [selectedCard, setSelectedCard] = useState({});
   const [currentTemperatureUnit, setCurrentTemperatureUnit] = useState("F");
+  const [clothingItems, setClothingItems] = useState([]);
 
   const handleCardClick = (card) => {
     setActiveModal("preview");
@@ -29,12 +32,41 @@ function App() {
     setActiveModal("add-garment");
   };
 
-  const closeActiveModal = () => {
-    setActiveModal("");
+  const handleDeleteClick = () => {
+    setActiveModal("delete-garment");
   };
 
-  const onAddItem = (values) => {
-    console.log(values);
+  const handleDeleteItem = () => {
+    deleteItem(selectedCard._id)
+      .then(() => {
+        setClothingItems((prevItem) =>
+          prevItem.filter((item) => item._id !== selectedCard._id)
+        );
+        closeActiveModal();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const openDeleteConfirmationModal = () => {
+    setActiveModal("delete-confirmation");
+    setSelectedCard(card);
+  };
+
+  const handleAddItemSubmit = (item) => {
+    addItem(item)
+      .then((newItem) => {
+        setClothingItems([newItem, ...clothingItems]);
+        closeActiveModal();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const closeActiveModal = () => {
+    setActiveModal("");
   };
 
   const handleToggleSwitchChange = () => {
@@ -53,43 +85,68 @@ function App() {
       });
   }, []);
 
+  useEffect(() => {
+    getItems()
+      .then((data) => {
+        console.log(data);
+        setClothingItems(data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+
   console.log(currentTemperatureUnit);
   return (
-    <BrowserRouter basename="/se_project_react/">
-      <div className="page">
-        <CurrentTemperatureUnitContext.Provider
-          value={{ currentTemperatureUnit, handleToggleSwitchChange }}
-        >
-          <div className="page__content">
-            <Header handleAddClick={handleAddClick} weatherData={weatherData} />
-            <Routes>
-              <Route
-                path="/"
-                element={
-                  <Main
-                    weatherData={weatherData}
-                    handleCardClick={handleCardClick}
-                  />
-                }
-              />
-              <Route path="/profile" element={<Profile />} />
-            </Routes>
+    <div className="page">
+      <CurrentTemperatureUnitContext.Provider
+        value={{ currentTemperatureUnit, handleToggleSwitchChange }}
+      >
+        <div className="page__content">
+          <Header handleAddClick={handleAddClick} weatherData={weatherData} />
+          <Routes>
+            <Route
+              path="/"
+              element={
+                <Main
+                  weatherData={weatherData}
+                  handleCardClick={handleCardClick}
+                  clothingItems={clothingItems}
+                />
+              }
+            />
+            <Route
+              path="/profile"
+              element={
+                <Profile
+                  onCardClick={handleCardClick}
+                  clothingItems={clothingItems}
+                />
+              }
+            />
+          </Routes>
 
-            <Footer />
-          </div>
-          <AddItemModal
-            closeActiveModal={closeActiveModal}
-            isOpen={activeModal === "add-garment"}
-            onAddItem={onAddItem}
-          />
-          <ItemModal
-            card={selectedCard}
-            onClose={closeActiveModal}
-            isOpen={activeModal === "preview"}
-          />
-        </CurrentTemperatureUnitContext.Provider>
-      </div>
-    </BrowserRouter>
+          <Footer />
+        </div>
+        <AddItemModal
+          closeActiveModal={closeActiveModal}
+          isOpen={activeModal === "add-garment"}
+          onAddItem={handleAddItemSubmit}
+        />
+        <ItemModal
+          card={selectedCard}
+          onClose={closeActiveModal}
+          isOpen={activeModal === "preview"}
+          handleDeleteClick={handleDeleteClick}
+          openDeleteConfirmationModal={openDeleteConfirmationModal}
+        />
+        <DeleteConfirmModal
+          isOpen={activeModal === "delete-garment"}
+          onClose={closeActiveModal}
+          onDelete={handleDeleteItem}
+        />
+      </CurrentTemperatureUnitContext.Provider>
+    </div>
   );
 }
 

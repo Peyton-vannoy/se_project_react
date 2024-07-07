@@ -3,12 +3,12 @@ import ModalWithForm from "../components/ModalWithForm/ModalWithForm";
 
 const AddItemModal = ({ isOpen, closeActiveModal, onAddItem }) => {
   const [name, setName] = useState("");
-  const [link, setUrl] = useState("");
+  const [imageUrl, setImageUrl] = useState("");
   const [weather, setWeather] = useState("");
 
   useEffect(() => {
     setName("");
-    setUrl("");
+    setImageUrl("");
     setWeather("");
   }, [isOpen]);
 
@@ -18,7 +18,7 @@ const AddItemModal = ({ isOpen, closeActiveModal, onAddItem }) => {
   };
   const handleUrlChange = (e) => {
     console.log(e.target.value);
-    setUrl(e.target.value);
+    setImageUrl(e.target.value);
   };
 
   const handleWeatherChange = (e) => {
@@ -28,7 +28,7 @@ const AddItemModal = ({ isOpen, closeActiveModal, onAddItem }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onAddItem({ name, link, weather });
+    onAddItem({ name, imageUrl, weather });
   };
 
   return (
@@ -54,12 +54,12 @@ const AddItemModal = ({ isOpen, closeActiveModal, onAddItem }) => {
       <label className="modal__label">
         {" Image "}
         <input
-          name="link"
+          name="imageUrl"
           type="url"
           className="modal__input"
           id="imageURL"
           placeholder="Image URL"
-          value={link}
+          value={imageUrl}
           onChange={handleUrlChange}
         />
       </label>
