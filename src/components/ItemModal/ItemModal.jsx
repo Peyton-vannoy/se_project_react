@@ -1,7 +1,12 @@
 import "./ItemModal.css";
 import closeItemIcon from "../../images/item-modal-close-btn.svg";
 
-function ItemModal({ onClose, card, isOpen, handleDeleteClick }) {
+function ItemModal({ onClose, card, isOpen, handleDeleteItem }) {
+  const handleDeleteClick = () => {
+    handleDeleteItem(card._id);
+    onClose();
+  };
+
   return (
     <div className={`modal ${isOpen ? "modal_opened" : ""}`}>
       <div className="modal__container modal__container_type_image">

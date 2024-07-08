@@ -22,8 +22,8 @@ function addItem({ name, link, weather }) {
   }).then(handleServerResponse);
 }
 
-function deleteItem(itemId) {
-  return fetch(`${baseUrl}/items/${itemId}`, {
+function deleteItem(id) {
+  return fetch(`${baseUrl}/items/${id}`, {
     method: "DELETE",
     headers: {
       "Content-Type": "application/json",

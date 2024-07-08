@@ -32,32 +32,23 @@ function App() {
     setActiveModal("add-garment");
   };
 
-  const handleDeleteClick = () => {
-    setActiveModal("delete-garment");
-  };
-
-  const handleDeleteItem = () => {
-    deleteItem(selectedCard._id)
+  const handleDeleteItem = (id) => {
+    return deleteItem(id)
       .then(() => {
-        setClothingItems((prevItem) =>
-          prevItem.filter((item) => item._id !== selectedCard._id)
+        const updatedClothingItems = clothingItems.filter(
+          (item) => item._id !== id
         );
-        closeActiveModal();
+        setClothingItems(updatedClothingItems);
       })
       .catch((err) => {
         console.log(err);
       });
   };
 
-  const openDeleteConfirmationModal = () => {
-    setActiveModal("delete-confirmation");
-    setSelectedCard(card);
-  };
-
-  const handleAddItemSubmit = (item) => {
-    addItem(item)
-      .then((newItem) => {
-        setClothingItems([newItem, ...clothingItems]);
+  const handleAddItemSubmit = (newItem) => {
+    addItem(newItem)
+      .then((item) => {
+        setClothingItems([item, ...clothingItems]);
         closeActiveModal();
       })
       .catch((err) => {
@@ -137,13 +128,7 @@ function App() {
           card={selectedCard}
           onClose={closeActiveModal}
           isOpen={activeModal === "preview"}
-          handleDeleteClick={handleDeleteClick}
-          openDeleteConfirmationModal={openDeleteConfirmationModal}
-        />
-        <DeleteConfirmModal
-          isOpen={activeModal === "delete-garment"}
-          onClose={closeActiveModal}
-          onDelete={handleDeleteItem}
+          handleDeleteItem={handleDeleteItem}
         />
       </CurrentTemperatureUnitContext.Provider>
     </div>
