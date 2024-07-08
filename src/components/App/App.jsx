@@ -7,8 +7,8 @@ import Main from "../Main/Main";
 import ItemModal from "../ItemModal/ItemModal";
 import Footer from "../Footer/Footer";
 import Profile from "../Profile/Profile";
-import AddItemModal from "../../AddItemModal/AddItemModal";
-import DeleteConfirmModal from "../DeleteConfirmModal/DeleteConfirmModal";
+import AddItemModal from "../AddItemModal/AddItemModal";
+
 import { filterWeatherData, getWeather } from "../../utils/weatherApi";
 import { CurrentTemperatureUnitContext } from "../../contexts/CurrentTemperatureUnitContext";
 import { getItems, addItem, deleteItem } from "../../utils/api";
