@@ -32,6 +32,17 @@ function App() {
     setActiveModal("add-garment");
   };
 
+  const onAddItem = (values) => {
+    addItem(values)
+      .then((item) => {
+        setClothingItems([item, ...clothingItems]);
+        closeActiveModal();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   const handleDeleteItem = (id) => {
     return deleteItem(id)
       .then(() => {
@@ -40,19 +51,8 @@ function App() {
         );
         setClothingItems(updatedClothingItems);
       })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
-  const handleAddItemSubmit = (newItem) => {
-    addItem(newItem)
-      .then((item) => {
-        setClothingItems([item, ...clothingItems]);
-        closeActiveModal();
-      })
-      .catch((err) => {
-        console.log(err);
+      .catch((error) => {
+        console.error("Error deleting this item", error);
       });
   };
 
@@ -101,7 +101,7 @@ function App() {
               element={
                 <Main
                   weatherData={weatherData}
-                  handleCardClick={handleCardClick}
+                  onCardClick={handleCardClick}
                   clothingItems={clothingItems}
                 />
               }
@@ -111,6 +111,7 @@ function App() {
               element={
                 <Profile
                   onCardClick={handleCardClick}
+                  handleAddClick={handleAddClick}
                   clothingItems={clothingItems}
                 />
               }
@@ -122,7 +123,7 @@ function App() {
         <AddItemModal
           closeActiveModal={closeActiveModal}
           isOpen={activeModal === "add-garment"}
-          onAddItem={handleAddItemSubmit}
+          onAddItem={onAddItem}
         />
         <ItemModal
           card={selectedCard}

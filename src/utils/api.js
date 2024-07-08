@@ -8,7 +8,7 @@ function getItems() {
   return fetch(`${baseUrl}/items`).then(handleServerResponse);
 }
 
-function addItem({ name, link, weather }) {
+function addItem({ name, imageUrl, weather }) {
   return fetch(`${baseUrl}/items`, {
     method: "POST",
     headers: {
@@ -16,7 +16,7 @@ function addItem({ name, link, weather }) {
     },
     body: JSON.stringify({
       name,
-      link,
+      imageUrl,
       weather,
     }),
   }).then(handleServerResponse);
