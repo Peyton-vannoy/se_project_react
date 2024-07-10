@@ -1,18 +1,5 @@
 .modal__container_type_image {
   padding: 0;
-  display: flex;
-  flex-direction: column;
-  position: relative;
-  width: 498px;
-  height: 610px;
-  font-family: "Cabinet Grotesk", sans-serif;
-  font-size: 20px;
-  line-height: 24px;
-  border-radius: 19px;
-  border-width: 1px;
-  border-style: solid;
-  border-color: rgba(243, 243, 243, 1);
-  overflow: hidden;
 }
 
 .modal {
