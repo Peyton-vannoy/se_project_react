@@ -94,7 +94,7 @@ function App() {
   useEffect(() => {
     getItems()
       .then((data) => {
-        console.log(data);
+        //console.log(data);
         setClothingItems(data);
       })
       .catch((err) => {
@@ -102,7 +102,7 @@ function App() {
       });
   }, []);
 
-  console.log(currentTemperatureUnit);
+  //console.log(currentTemperatureUnit);
   return (
     <div className="page">
       <CurrentTemperatureUnitContext.Provider
