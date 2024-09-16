@@ -1,7 +1,5 @@
 import { handleServerResponse } from "./api";
 
-const BASE_URL = "http://localhost:3001";
-
 export const register = (name, avatar, email, password) => {
   return fetch(`${BASE_URL}/signup`, {
     method: "POST",

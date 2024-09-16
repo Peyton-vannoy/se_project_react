@@ -1,6 +1,6 @@
 import { BASE_URL } from "./constants";
 
-const handleServerResponse = (res) => {
+export const handleServerResponse = (res) => {
   return res.ok ? res.json() : Promise.reject(`Error: ${res.status}`);
 };
 

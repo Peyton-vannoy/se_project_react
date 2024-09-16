@@ -14,7 +14,6 @@ import LoginModal from "../LoginModal/LoginModal";
 import RegisterModal from "../RegisterModal/RegisterModal";
 import ProtectedRoute from "../ProtectedRoute/ProtectedRoute";
 import { register, login, checkToken } from "../../utils/auth";
-
 import { filterWeatherData, getWeather } from "../../utils/weatherApi";
 import { CurrentTemperatureUnitContext } from "../../contexts/CurrentTemperatureUnitContext";
 import { CurrentUserContext } from "../../contexts/CurrentUserContext";
@@ -175,8 +174,8 @@ function App() {
           <div className="page__content">
             <Header
               handleAddClick={handleAddClick}
-              onRegisterClick={handleRegisterClick}
-              onLoginClick={handleLoginClick}
+              onRegisterClick={() => setIsRegisterModalOpen(true)}
+              onLoginClick={() => setIsLoginModalOpen(true)}
               weatherData={weatherData}
               isLoggedIn={isLoggedIn}
               onLogout={handleLogout}

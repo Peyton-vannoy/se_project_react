@@ -1,12 +1,13 @@
-import React from "react";
-import { Outlet, Link } from "react-router-dom";
-
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import "./Header.css";
 import headerLogo from "../../images/header-logo.svg";
 import profilePicture from "../../images/profile-picture.jpg";
 import ToggleSwitch from "../ToggleSwitch/ToggleSwitch";
 
-function Header({ handleAddClick, weatherData }) {
+function Header({ handleAddClick, weatherData, isLoggedIn, currentUser }) {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   const currentDate = new Date().toLocaleString("default", {
     month: "long",
     day: "numeric",
@@ -20,24 +21,36 @@ function Header({ handleAddClick, weatherData }) {
         {currentDate}, {weatherData.city}
       </p>
       <ToggleSwitch />
-      <button
-        type="button"
-        onClick={handleAddClick}
-        className="header__add-clothes-btn"
-      >
-        + Add clothes
-      </button>
       <div className="header__user-container">
-        <p className="header__username">Peyton Vannoy</p>
-        <Link to="/profile">
-          <img
-            src={profilePicture}
-            alt="Peyton Vannoy"
-            className="header__profile-picture"
-          />
-        </Link>
+        {isLoggedIn ? (
+          <>
+            <button
+              type="button"
+              onClick={handleAddClick}
+              className="header__add-clothes-btn"
+            >
+              + Add clothes
+            </button>
+            <p className="header__username">{currentUser.name}</p>
+            <Link to="/profile">
+              <img
+                src={currentUser.avatar || profilePicture}
+                alt={currentUser.name}
+                className="header__profile-picture"
+              />
+            </Link>
+          </>
+        ) : (
+          <>
+            <Link to="/login" className="header__login-btn">
+              Log in
+            </Link>
+            <Link to="/register" className="header__register-btn">
+              Sign up
+            </Link>
+          </>
+        )}
       </div>
-      <Outlet />
     </header>
   );
 }

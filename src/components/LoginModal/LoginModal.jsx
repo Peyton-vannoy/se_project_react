@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import ModalWithForm from "../ModalWithForm/ModalWithForm";
 
 function LoginModal({ onClose, onLogin }) {
   const [email, setEmail] = useState("");
