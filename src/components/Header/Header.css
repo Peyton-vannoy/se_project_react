@@ -45,3 +45,27 @@
   width: 40px;
   height: 40px;
 }
+
+.header__auth-buttons {
+  display: flex;
+  gap: 20px;
+}
+
+.header__button {
+  font-family: "Cabinet Grotesk", sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 24px;
+  border: none;
+  cursor: pointer;
+  background-color: transparent;
+}
+
+.header__button:hover {
+  opacity: 0.8;
+}
+
+.header__button:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.5);
+}

@@ -1,25 +1,27 @@
-import { BASE_URL } from "./constants";
+const baseUrl = "http://localhost:3001";
 
-export const handleServerResponse = (res) => {
+const handleServerResponse = (res) => {
   return res.ok ? res.json() : Promise.reject(`Error: ${res.status}`);
 };
 
-const token = localStorage.getItem("jwt");
-
-export const getItems = () => {
-  return fetch(`${BASE_URL}/items`, {
-    headers: {
-      "Content-Type": "application/json",
-    },
-  }).then(handleServerResponse);
+const fetchWithToken = (url, options) => {
+  const token = localStorage.getItem("jwt");
+  const headers = {
+    "Content-Type": "application/json",
+    ...(token && { Authorization: `Bearer ${token}` }),
+  };
+  return fetch(url, { ...options, headers }).then(handleServerResponse);
 };
 
-export const addItem = ({ name, imageUrl, weather }) => {
-  return fetch(`${BASE_URL}/items`, {
+function getItems() {
+  return fetchWithToken(`${baseUrl}/items`).then(handleServerResponse);
+}
+
+function addItem({ name, imageUrl, weather }) {
+  return fetchWithToken(`${baseUrl}/items`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
     },
     body: JSON.stringify({
       name,
@@ -27,14 +29,15 @@ export const addItem = ({ name, imageUrl, weather }) => {
       weather,
     }),
   }).then(handleServerResponse);
-};
+}
 
-export const deleteItem = (id) => {
-  return fetch(`${BASE_URL}/items/${id}`, {
+function deleteItem(id) {
+  return fetchWithToken(`${baseUrl}/items/${id}`, {
     method: "DELETE",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
     },
   }).then(handleServerResponse);
-};
+}
+
+export { getItems, addItem, deleteItem, handleServerResponse, baseUrl };

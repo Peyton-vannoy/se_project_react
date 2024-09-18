@@ -1,7 +1,5 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
-
 import "./App.css";
 import { coordinates, APIkey } from "../../utils/constants";
 import Header from "../Header/Header";
@@ -13,7 +11,7 @@ import AddItemModal from "../AddItemModal/AddItemModal";
 import LoginModal from "../LoginModal/LoginModal";
 import RegisterModal from "../RegisterModal/RegisterModal";
 import ProtectedRoute from "../ProtectedRoute/ProtectedRoute";
-import { register, login, checkToken } from "../../utils/auth";
+
 import { filterWeatherData, getWeather } from "../../utils/weatherApi";
 import { CurrentTemperatureUnitContext } from "../../contexts/CurrentTemperatureUnitContext";
 import { CurrentUserContext } from "../../contexts/CurrentUserContext";
@@ -30,57 +28,26 @@ function App() {
   const [currentTemperatureUnit, setCurrentTemperatureUnit] = useState("F");
   const [clothingItems, setClothingItems] = useState([]);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [isLoginModalOpen, setIsLoginModalOpen] = useState(true);
-  const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
   const [currentUser, setCurrentUser] = useState({});
-  const navigate = useNavigate();
+  const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
 
-  // Modal handling functions
   const handleCardClick = (card) => {
     setActiveModal("preview");
     setSelectedCard(card);
   };
-
   const handleAddClick = () => {
     setActiveModal("add-garment");
   };
 
-  const closeActiveModal = () => {
-    setActiveModal("");
+  const handleRegisterSuccess = () => {
+    setIsLoggedIn(true);
   };
 
-  const handleRegister = ({ name, avatar, email, password }) => {
-    register(name, avatar, email, password)
-      .then(() => {
-        handleLogin({ email, password });
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+  const handleLoginSuccess = () => {
+    setIsLoggedIn(true);
   };
 
-  const handleLogin = ({ email, password }) => {
-    login(email, password)
-      .then((res) => {
-        localStorage.setItem("jwt", res.token);
-        setIsLoggedIn(true);
-        setCurrentUser(res.user);
-        setIsLoginModalOpen(false);
-        navigate("/");
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
-  const handleLogout = () => {
-    localStorage.removeItem("jwt");
-    setIsLoggedIn(false);
-    setCurrentUser(null);
-    navigate("/");
-  };
-
-  // Item management functions
   const onAddItem = (values) => {
     addItem(values)
       .then((item) => {
@@ -105,27 +72,9 @@ function App() {
       });
   };
 
-  // Temperature unit toggle function
-  const handleToggleSwitchChange = () => {
-    if (currentTemperatureUnit === "C") setCurrentTemperatureUnit("F");
-    if (currentTemperatureUnit === "F") setCurrentTemperatureUnit("C");
+  const closeActiveModal = () => {
+    setActiveModal("");
   };
-
-  // Side effects
-
-  useEffect(() => {
-    const token = localStorage.getItem("jwt");
-    if (token) {
-      checkToken(token)
-        .then((userData) => {
-          setCurrentUser(userData);
-          setIsLoggedIn(true);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
-  }, []);
 
   useEffect(() => {
     if (!activeModal) return;
@@ -142,6 +91,11 @@ function App() {
     };
   }, [activeModal]);
 
+  const handleToggleSwitchChange = () => {
+    if (currentTemperatureUnit === "C") setCurrentTemperatureUnit("F");
+    if (currentTemperatureUnit === "F") setCurrentTemperatureUnit("C");
+  };
+
   useEffect(() => {
     getWeather(coordinates, APIkey)
       .then((data) => {
@@ -155,13 +109,22 @@ function App() {
 
   useEffect(() => {
     getItems()
-      .then((data) => {
+      .then(({ data }) => {
         //console.log(data);
         setClothingItems(data);
       })
       .catch((err) => {
         console.log(err);
       });
+  }, []);
+
+  useEffect(() => {
+    const token = localStorage.getItem("jwt");
+    if (token) {
+      getCurrentUser(token)
+        .then(() => setIsLoggedIn(true))
+        .catch(() => localStorage.removeItem("jwt"));
+    }
   }, []);
 
   //console.log(currentTemperatureUnit);
@@ -174,18 +137,16 @@ function App() {
           <div className="page__content">
             <Header
               handleAddClick={handleAddClick}
-              onRegisterClick={() => setIsRegisterModalOpen(true)}
-              onLoginClick={() => setIsLoginModalOpen(true)}
               weatherData={weatherData}
+              setRegisterModalOpen={setIsRegisterModalOpen}
+              setLoginModalOpen={setIsLoginModalOpen}
               isLoggedIn={isLoggedIn}
-              onLogout={handleLogout}
             />
             <Routes>
               <Route
                 path="/"
                 element={
                   <Main
-                    isLoggedIn={isLoggedIn}
                     weatherData={weatherData}
                     onCardClick={handleCardClick}
                     clothingItems={clothingItems}
@@ -197,7 +158,6 @@ function App() {
                 element={
                   <ProtectedRoute isLoggedIn={isLoggedIn}>
                     <Profile
-                      currentUser={currentUser}
                       onCardClick={handleCardClick}
                       handleAddClick={handleAddClick}
                       clothingItems={clothingItems}
@@ -206,21 +166,20 @@ function App() {
                 }
               />
             </Routes>
-            {isRegisterModalOpen && (
-              <RegisterModal
-                onClose={() => setIsRegisterModalOpen(false)}
-                onRegister={handleRegister}
-              />
-            )}
-            {isLoginModalOpen && (
-              <LoginModal
-                onClose={() => setIsLoginModalOpen(false)}
-                onLogin={handleLogin}
-              />
-            )}
 
             <Footer />
           </div>
+
+          <RegisterModal
+            isOpen={isRegisterModalOpen}
+            onClose={() => setIsRegisterModalOpen(false)}
+            onRegisterSuccess={handleRegisterSuccess}
+          />
+          <LoginModal
+            isOpen={isLoginModalOpen}
+            onClose={() => setIsLoginModalOpen(false)}
+            onLoginSuccess={handleLoginSuccess}
+          />
           <AddItemModal
             closeActiveModal={closeActiveModal}
             isOpen={activeModal === "add-garment"}

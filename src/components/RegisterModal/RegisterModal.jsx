@@ -1,38 +1,33 @@
 import React, { useState } from "react";
 import ModalWithForm from "../ModalWithForm/ModalWithForm";
 import "./RegisterModal";
+import { register } from "../../utils/auth";
 
-function RegisterModal({ isOpen, onClose }) {
-  const [name, setname] = useState("");
+function RegisterModal({ isOpen, onClose, onRegisterSuccess }) {
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [avatar, setAvatar] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onRegister({ name, avatar, email, password });
+    register({ name, email, password, avatar })
+      .then((res) => {
+        onRegisterSuccess(res);
+        onClose();
+      })
+      .catch((err) => {
+        console.error("Error registering user:", err);
+      });
   };
   return (
     <ModalWithForm
+      isOpen={isOpen}
       title="Register"
+      buttonText="Register"
       onSubmit={handleSubmit}
       onClose={onClose}
-      required
     >
-      <input
-        type="text"
-        placeholder="name"
-        value={name}
-        onChange={(e) => setname(e.target.value)}
-        required
-      />
-      <input
-        type="url"
-        placeholder="Avatar Url"
-        value={avatar}
-        onChange={(e) => setAvatar(e.target.value)}
-        required
-      />
       <input
         type="email"
         placeholder="Email"
@@ -45,6 +40,20 @@ function RegisterModal({ isOpen, onClose }) {
         placeholder="Password"
         value={password}
         onChange={(e) => setPassword(e.target.value)}
+        required
+      />
+      <input
+        type="text"
+        placeholder="name"
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+        required
+      />
+      <input
+        type="url"
+        placeholder="Avatar Url"
+        value={avatar}
+        onChange={(e) => setAvatar(e.target.value)}
         required
       />
     </ModalWithForm>

@@ -1,17 +1,31 @@
 import React, { useState } from "react";
 import ModalWithForm from "../ModalWithForm/ModalWithForm";
 
-function LoginModal({ onClose, onLogin }) {
+function LoginModal({ isOpen, onClose, onLoginSuccess }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onLogin({ email, password });
+    login({ email, password })
+      .then((res) => {
+        localStorage.setItem("jwt", res.token);
+        onLoginSuccess();
+        onClose();
+      })
+      .catch((err) => {
+        console.error("Error logging in user:", err);
+      });
   };
 
   return (
-    <ModalWithForm title="Login" onSubmit={handleSubmit} onClose={onClose}>
+    <ModalWithForm
+      isOpen={isOpen}
+      title="Login"
+      buttonText="Login"
+      onSubmit={handleSubmit}
+      onClose={onClose}
+    >
       <input
         type="email"
         placeholder="Email"

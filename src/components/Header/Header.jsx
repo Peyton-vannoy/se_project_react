@@ -1,13 +1,20 @@
-import React, { useState } from "react";
+import React, { useContext } from "react";
 import { Link } from "react-router-dom";
+
 import "./Header.css";
 import headerLogo from "../../images/header-logo.svg";
 import profilePicture from "../../images/profile-picture.jpg";
 import ToggleSwitch from "../ToggleSwitch/ToggleSwitch";
+import { CurrentUserContext } from "../../contexts/CurrentUserContext";
 
-function Header({ handleAddClick, weatherData, isLoggedIn, currentUser }) {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
+function Header({
+  handleAddClick,
+  weatherData,
+  isLoggedIn,
+  setRegisterModalOpen,
+  setLoginModalOpen,
+}) {
+  const currentUser = useContext(CurrentUserContext);
   const currentDate = new Date().toLocaleString("default", {
     month: "long",
     day: "numeric",
@@ -24,6 +31,20 @@ function Header({ handleAddClick, weatherData, isLoggedIn, currentUser }) {
       <div className="header__user-container">
         {isLoggedIn ? (
           <>
+            {currentUser.avatar ? (
+              <Link to="/profile">
+                <img
+                  src={currentUser.avatar}
+                  alt={currentUser.name}
+                  className="header__profile-picture"
+                />
+              </Link>
+            ) : (
+              <div className="header__profile-placeholder">
+                {currentUser.name.charAt(0)}
+              </div>
+            )}
+            <p className="header__username">{currentUser.name}</p>
             <button
               type="button"
               onClick={handleAddClick}
@@ -31,24 +52,22 @@ function Header({ handleAddClick, weatherData, isLoggedIn, currentUser }) {
             >
               + Add clothes
             </button>
-            <p className="header__username">{currentUser.name}</p>
-            <Link to="/profile">
-              <img
-                src={currentUser.avatar || profilePicture}
-                alt={currentUser.name}
-                className="header__profile-picture"
-              />
-            </Link>
           </>
         ) : (
-          <>
-            <Link to="/login" className="header__login-btn">
-              Log in
-            </Link>
-            <Link to="/register" className="header__register-btn">
+          <div className="header__auth-buttons">
+            <button
+              onClick={() => setRegisterModalOpen(true)}
+              className="header__button"
+            >
               Sign up
-            </Link>
-          </>
+            </button>
+            <button
+              onClick={() => setLoginModalOpen(true)}
+              className="header__button"
+            >
+              Log in
+            </button>
+          </div>
         )}
       </div>
     </header>
