@@ -54,7 +54,6 @@
 }
 
 .modal__label {
-  margin-bottom: 24px;
   font-family: "Cabinet Grotesk", sans-serif;
   font-size: 16px;
   font-weight: 700;
@@ -68,7 +67,7 @@
   font-weight: 700;
   line-height: 20px;
   border: 1px solid rgba(0, 0, 0, 0.3);
-  margin-top: 8px;
+  margin: 8px 0 24px;
   padding: 0;
   border: none;
   border-bottom: 1px solid #000;

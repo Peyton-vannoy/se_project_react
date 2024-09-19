@@ -14,9 +14,10 @@ import ProtectedRoute from "../ProtectedRoute/ProtectedRoute";
 
 import { filterWeatherData, getWeather } from "../../utils/weatherApi";
 import { CurrentTemperatureUnitContext } from "../../contexts/CurrentTemperatureUnitContext";
-import { CurrentUserContext } from "../../contexts/CurrentUserContext";
-import { getItems, addItem, deleteItem } from "../../utils/api";
 
+import { CurrentUserContext } from "../../contexts/CurrentUserContext";
+import * as api from "../../utils/api";
+import { getCurrentUser } from "../../utils/auth";
 function App() {
   const [weatherData, setWeatherData] = useState({
     type: "",
@@ -28,6 +29,7 @@ function App() {
   const [currentTemperatureUnit, setCurrentTemperatureUnit] = useState("F");
   const [clothingItems, setClothingItems] = useState([]);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+
   const [currentUser, setCurrentUser] = useState({});
   const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
@@ -49,7 +51,8 @@ function App() {
   };
 
   const onAddItem = (values) => {
-    addItem(values)
+    api
+      .addItem(values)
       .then((item) => {
         setClothingItems([item, ...clothingItems]);
         closeActiveModal();
@@ -60,7 +63,8 @@ function App() {
   };
 
   const handleDeleteItem = (id) => {
-    return deleteItem(id)
+    return api
+      .deleteItem(id)
       .then(() => {
         const updatedClothingItems = clothingItems.filter(
           (item) => item._id !== id
@@ -70,6 +74,27 @@ function App() {
       .catch((error) => {
         console.error("Error deleting this item", error);
       });
+  };
+
+  const handleCardLike = ({ id, isLiked }) => {
+    const token = localStorage.getItem("jwt");
+    !isLiked
+      ? api
+          .addCardLike(id, token)
+          .then((updatedCard) => {
+            setClothingItems((cards) =>
+              cards.map((item) => (item._id === id ? updatedCard : item))
+            );
+          })
+          .catch((err) => console.error("Error adding card like", err))
+      : api
+          .removeCardLike(id, token)
+          .then((updatedCard) => {
+            setClothingItems((cards) =>
+              cards.map((item) => (item._id === id ? updatedCard : item))
+            );
+          })
+          .catch((err) => console.error("Error removing card like", err));
   };
 
   const closeActiveModal = () => {
@@ -108,13 +133,14 @@ function App() {
   }, []);
 
   useEffect(() => {
-    getItems()
+    api
+      .getItems()
       .then(({ data }) => {
         //console.log(data);
         setClothingItems(data);
       })
       .catch((err) => {
-        console.log(err);
+        console.error("Error fetching clothing items", err);
       });
   }, []);
 
@@ -129,7 +155,7 @@ function App() {
 
   //console.log(currentTemperatureUnit);
   return (
-    <CurrentUserContext.Provider value={currentUser}>
+    <CurrentUserContext.Provider value={{ currentUser, setCurrentUser }}>
       <div className="page">
         <CurrentTemperatureUnitContext.Provider
           value={{ currentTemperatureUnit, handleToggleSwitchChange }}
@@ -150,6 +176,7 @@ function App() {
                     weatherData={weatherData}
                     onCardClick={handleCardClick}
                     clothingItems={clothingItems}
+                    onCardLike={handleCardLike}
                   />
                 }
               />
@@ -161,6 +188,7 @@ function App() {
                       onCardClick={handleCardClick}
                       handleAddClick={handleAddClick}
                       clothingItems={clothingItems}
+                      setIsLoggedIn={setIsLoggedIn}
                     />
                   </ProtectedRoute>
                 }

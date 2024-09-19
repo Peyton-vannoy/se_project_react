@@ -34,14 +34,14 @@ function Header({
             {currentUser.avatar ? (
               <Link to="/profile">
                 <img
-                  src={currentUser.avatar}
-                  alt={currentUser.name}
+                  src={currentUser?.avatar}
+                  alt={currentUser?.name}
                   className="header__profile-picture"
                 />
               </Link>
             ) : (
               <div className="header__profile-placeholder">
-                {currentUser.name.charAt(0)}
+                {currentUser.name?.charAt(0)}
               </div>
             )}
             <p className="header__username">{currentUser.name}</p>

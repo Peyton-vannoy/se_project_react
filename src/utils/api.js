@@ -18,7 +18,7 @@ function getItems() {
 }
 
 function addItem({ name, imageUrl, weather }) {
-  return fetchWithToken(`${baseUrl}/items`, {
+  return fetch(`${baseUrl}/items`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -40,4 +40,42 @@ function deleteItem(id) {
   }).then(handleServerResponse);
 }
 
-export { getItems, addItem, deleteItem, handleServerResponse, baseUrl };
+function updateUserProfile({ name, avatar }) {
+  return fetchWithToken(`${baseUrl}/users/me`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ name, avatar }),
+  }).then(handleServerResponse);
+}
+
+function addCardLike(id) {
+  return fetchWithToken(`${baseUrl}/items/${id}/likes`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  }).then(handleServerResponse);
+}
+
+function removeCardLike(id) {
+  return fetchWithToken(`${baseUrl}/items/${id}/likes`, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  }).then(handleServerResponse);
+}
+
+export {
+  getItems,
+  addItem,
+  deleteItem,
+  handleServerResponse,
+  updateUserProfile,
+  addCardLike,
+  removeCardLike,
+  fetchWithToken,
+  baseUrl,
+};
