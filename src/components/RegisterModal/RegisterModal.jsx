@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import ModalWithForm from "../ModalWithForm/ModalWithForm";
 import "./RegisterModal";
-import { register } from "../../utils/auth";
 
 function RegisterModal({ isOpen, onClose, onRegisterSuccess }) {
   const [name, setName] = useState("");
@@ -11,14 +10,7 @@ function RegisterModal({ isOpen, onClose, onRegisterSuccess }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    register({ name, email, password, avatar })
-      .then((res) => {
-        onRegisterSuccess(res);
-        onClose();
-      })
-      .catch((err) => {
-        console.error("Error registering user:", err);
-      });
+    onRegisterSuccess({ name, email, password, avatar });
   };
   return (
     <ModalWithForm
@@ -32,6 +24,7 @@ function RegisterModal({ isOpen, onClose, onRegisterSuccess }) {
         Email*
       </label>
       <input
+        name="email"
         className="modal__input"
         type="email"
         placeholder="Email"
@@ -43,6 +36,7 @@ function RegisterModal({ isOpen, onClose, onRegisterSuccess }) {
         Password*
       </label>
       <input
+        name="password"
         className="modal__input"
         type="password"
         placeholder="Password"
@@ -54,6 +48,7 @@ function RegisterModal({ isOpen, onClose, onRegisterSuccess }) {
         Name*
       </label>
       <input
+        name="name"
         className="modal__input"
         type="text"
         placeholder="Name"
@@ -65,6 +60,7 @@ function RegisterModal({ isOpen, onClose, onRegisterSuccess }) {
         Avatar Url
       </label>
       <input
+        name="avatar"
         className="modal__input"
         type="url"
         placeholder="Avatar Url"

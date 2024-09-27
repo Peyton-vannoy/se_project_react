@@ -27,3 +27,12 @@
   object-fit: cover;
   border-radius: 20px;
 }
+
+.card__like-button {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}

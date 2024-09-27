@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route, useNavigate } from "react-router-dom";
 import "./App.css";
 import { coordinates, APIkey } from "../../utils/constants";
 import Header from "../Header/Header";
@@ -17,8 +17,9 @@ import { CurrentTemperatureUnitContext } from "../../contexts/CurrentTemperature
 
 import { CurrentUserContext } from "../../contexts/CurrentUserContext";
 import * as api from "../../utils/api";
-import { getCurrentUser } from "../../utils/auth";
+import { getCurrentUser, login, register } from "../../utils/auth";
 function App() {
+  const navigate = useNavigate();
   const [weatherData, setWeatherData] = useState({
     type: "",
     temp: { F: 999, C: 999 },
@@ -28,9 +29,9 @@ function App() {
   const [selectedCard, setSelectedCard] = useState({});
   const [currentTemperatureUnit, setCurrentTemperatureUnit] = useState("F");
   const [clothingItems, setClothingItems] = useState([]);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(true);
 
-  const [currentUser, setCurrentUser] = useState({});
+  const [currentUser, setCurrentUser] = useState({ name: "", avatar: "" });
   const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
 
@@ -42,12 +43,53 @@ function App() {
     setActiveModal("add-garment");
   };
 
-  const handleRegisterSuccess = () => {
-    setIsLoggedIn(true);
+  const handleRegister = ({ name, email, avatar, password }) => {
+    register({ name, email, avatar, password })
+      .then((res) => {
+        return login({ email, password });
+      })
+      .then((loginRes) => {
+        setIsLoggedIn(true);
+        setCurrentUser({ name, avatar });
+        localStorage.setItem("jwt", loginRes.token);
+        navigate("/");
+        setIsRegisterModalOpen(false);
+      })
+      .catch((err) => {
+        if (err.status === 409) {
+          console.error("User already exists, Please use a different email");
+        } else {
+          console.error("Error registering user", err);
+        }
+      });
   };
 
-  const handleLoginSuccess = () => {
+  const handleUpdateSuccess = (updatedUser) => {
+    setCurrentUser((prevUser) => ({
+      ...prevUser,
+      ...updatedUser,
+    }));
+  };
+
+  // const handleRegisterSuccess = (res) => {
+  //   login({ email: res.email, password: res.password }).catch((err) => {
+  //     console.error("Error logging in after registering", err);
+  //   });
+  // };
+
+  const handleLoginSuccess = (res) => {
+    const { email, name, avatar } = res || {};
+
+    console.log("Login response", res);
+
+    if (!email || !name || !avatar) {
+      return;
+    }
+
     setIsLoggedIn(true);
+    setCurrentUser({ name, avatar });
+    navigate("/");
+    console.log("User data after login", { email, name, avatar });
   };
 
   const onAddItem = (values) => {
@@ -78,6 +120,7 @@ function App() {
 
   const handleCardLike = ({ id, isLiked }) => {
     const token = localStorage.getItem("jwt");
+    console.log("token", token);
     !isLiked
       ? api
           .addCardLike(id, token)
@@ -136,7 +179,6 @@ function App() {
     api
       .getItems()
       .then(({ data }) => {
-        //console.log(data);
         setClothingItems(data);
       })
       .catch((err) => {
@@ -153,6 +195,10 @@ function App() {
     }
   }, []);
 
+  useEffect(() => {
+    console.log("is Logged In", isLoggedIn);
+  }, [isLoggedIn]);
+
   //console.log(currentTemperatureUnit);
   return (
     <CurrentUserContext.Provider value={{ currentUser, setCurrentUser }}>
@@ -167,6 +213,7 @@ function App() {
               setRegisterModalOpen={setIsRegisterModalOpen}
               setLoginModalOpen={setIsLoginModalOpen}
               isLoggedIn={isLoggedIn}
+              onUpdateSuccess={handleUpdateSuccess}
             />
             <Routes>
               <Route
@@ -189,6 +236,7 @@ function App() {
                       handleAddClick={handleAddClick}
                       clothingItems={clothingItems}
                       setIsLoggedIn={setIsLoggedIn}
+                      onUpdateSuccess={handleUpdateSuccess}
                     />
                   </ProtectedRoute>
                 }
@@ -201,7 +249,7 @@ function App() {
           <RegisterModal
             isOpen={isRegisterModalOpen}
             onClose={() => setIsRegisterModalOpen(false)}
-            onRegisterSuccess={handleRegisterSuccess}
+            onRegisterSuccess={handleRegister}
           />
           <LoginModal
             isOpen={isLoginModalOpen}

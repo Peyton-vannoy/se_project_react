@@ -1,18 +1,20 @@
 import React, { useState, useContext } from "react";
 import { CurrentUserContext } from "../../contexts/CurrentUserContext";
 import ModalWithForm from "../ModalWithForm/ModalWithForm";
-import { updateUserProfile } from "../../utils/api";
+import * as api from "../../utils/api";
 
 function EditProfileModal({ isOpen, onClose, onUpdateSuccess }) {
   const { currentUser } = useContext(CurrentUserContext);
-  const [name, setName] = useState(currentUser.name || "");
-  const [avatar, setAvatar] = useState(currentUser.avatar || "");
+  const [name, setName] = useState(currentUser?.name || "");
+  const [avatar, setAvatar] = useState(currentUser?.avatar || "");
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    updateUserProfile({ name, avatar })
-      .then((updatedUser) => {
-        onUpdateSuccess(updatedUser);
+    console.log("Updating user profile with:", { name, avatar });
+    api
+      .updateUserProfile({ name, avatar })
+      .then((res) => {
+        onUpdateSuccess(res);
         onClose();
       })
       .catch((err) => {
@@ -31,6 +33,7 @@ function EditProfileModal({ isOpen, onClose, onUpdateSuccess }) {
         Name*
       </label>
       <input
+        name="name"
         className="modal__input"
         type="text"
         id="name"
@@ -44,6 +47,7 @@ function EditProfileModal({ isOpen, onClose, onUpdateSuccess }) {
       </label>
       <input
         className="modal__input"
+        name="avatar"
         type="url"
         id="avatar"
         placeholder="Avatar URL"

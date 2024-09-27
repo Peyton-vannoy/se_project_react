@@ -25,7 +25,16 @@ export const login = ({ email, password }) => {
       email,
       password,
     }),
-  }).then(handleServerResponse);
+  })
+    .then(handleServerResponse)
+    .then((data) => {
+      return {
+        email: data.email,
+        name: data.name,
+        avatar: data.avatar,
+        token: data.token,
+      };
+    });
 };
 
 export const getCurrentUser = (token) => {

@@ -11,7 +11,7 @@ function LoginModal({ isOpen, onClose, onLoginSuccess }) {
     login({ email, password })
       .then((res) => {
         localStorage.setItem("jwt", res.token);
-        onLoginSuccess();
+        onLoginSuccess(res);
         onClose();
       })
       .catch((err) => {
@@ -31,6 +31,7 @@ function LoginModal({ isOpen, onClose, onLoginSuccess }) {
         Email*
       </label>
       <input
+        name="email"
         className="modal__input"
         type="email"
         placeholder="Email"
@@ -42,6 +43,7 @@ function LoginModal({ isOpen, onClose, onLoginSuccess }) {
         Password*
       </label>
       <input
+        name="password"
         className="modal__input"
         type="password"
         placeholder="Password"

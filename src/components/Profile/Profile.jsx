@@ -10,18 +10,22 @@ function Profile({
   clothingItems,
   handleAddClick,
   setIsLoggedIn,
+  onUpdateSuccess,
 }) {
   const { currentUser, setCurrentUser } = useContext(CurrentUserContext);
   const [isEditProfileModalOpen, setIsEditProfileModalOpen] = useState(false);
-
-  const handleUpdateSuccess = (updatedUser) => {
-    setCurrentUser(updatedUser);
-  };
 
   const handleLogout = () => {
     localStorage.removeItem("jwt");
     setIsLoggedIn(false);
     setCurrentUser(null);
+  };
+
+  const handleUpdateSuccess = (updatedUser) => {
+    setCurrentUser((prevUser) => ({
+      ...prevUser,
+      ...updatedUser,
+    }));
   };
 
   return (
@@ -50,7 +54,7 @@ function Profile({
       <EditProfileModal
         isOpen={isEditProfileModalOpen}
         onClose={() => setIsEditProfileModalOpen(false)}
-        onUpdateSuccess={handleUpdateSuccess}
+        onUpdateSuccess={onUpdateSuccess}
       />
     </div>
   );

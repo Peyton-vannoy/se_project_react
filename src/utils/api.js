@@ -14,7 +14,7 @@ const fetchWithToken = (url, options) => {
 };
 
 function getItems() {
-  return fetchWithToken(`${baseUrl}/items`).then(handleServerResponse);
+  return fetch(`${baseUrl}/items`).then(handleServerResponse);
 }
 
 function addItem({ name, imageUrl, weather }) {
@@ -32,7 +32,7 @@ function addItem({ name, imageUrl, weather }) {
 }
 
 function deleteItem(id) {
-  return fetchWithToken(`${baseUrl}/items/${id}`, {
+  return fetch(`${baseUrl}/items/${id}`, {
     method: "DELETE",
     headers: {
       "Content-Type": "application/json",
@@ -41,29 +41,33 @@ function deleteItem(id) {
 }
 
 function updateUserProfile({ name, avatar }) {
-  return fetchWithToken(`${baseUrl}/users/me`, {
+  const token = localStorage.getItem("jwt");
+  return fetch(`${baseUrl}/users/me`, {
     method: "PATCH",
     headers: {
       "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
     },
     body: JSON.stringify({ name, avatar }),
   }).then(handleServerResponse);
 }
 
-function addCardLike(id) {
-  return fetchWithToken(`${baseUrl}/items/${id}/likes`, {
+function addCardLike(id, token) {
+  return fetch(`${baseUrl}/items/${id}/likes`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
     },
   }).then(handleServerResponse);
 }
 
-function removeCardLike(id) {
-  return fetchWithToken(`${baseUrl}/items/${id}/likes`, {
+function removeCardLike(id, token) {
+  return fetch(`${baseUrl}/items/${id}/likes`, {
     method: "DELETE",
     headers: {
       "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
     },
   }).then(handleServerResponse);
 }

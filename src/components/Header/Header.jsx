@@ -14,11 +14,12 @@ function Header({
   setRegisterModalOpen,
   setLoginModalOpen,
 }) {
-  const currentUser = useContext(CurrentUserContext);
+  const { currentUser } = useContext(CurrentUserContext);
   const currentDate = new Date().toLocaleString("default", {
     month: "long",
     day: "numeric",
   });
+
   return (
     <header className="header">
       <Link to={"/"}>
@@ -31,6 +32,13 @@ function Header({
       <div className="header__user-container">
         {isLoggedIn ? (
           <>
+            <button
+              type="button"
+              onClick={handleAddClick}
+              className="header__add-clothes-btn"
+            >
+              + Add clothes
+            </button>
             {currentUser.avatar ? (
               <Link to="/profile">
                 <img
@@ -44,14 +52,7 @@ function Header({
                 {currentUser.name?.charAt(0)}
               </div>
             )}
-            <p className="header__username">{currentUser.name}</p>
-            <button
-              type="button"
-              onClick={handleAddClick}
-              className="header__add-clothes-btn"
-            >
-              + Add clothes
-            </button>
+            <p className="header__username">{currentUser?.name}</p>
           </>
         ) : (
           <div className="header__auth-buttons">
