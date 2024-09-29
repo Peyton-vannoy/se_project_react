@@ -67,7 +67,7 @@ function App() {
   const handleUpdateSuccess = (updatedUser) => {
     setCurrentUser((prevUser) => ({
       ...prevUser,
-      ...updatedUser,
+      ...updatedUser.data,
     }));
   };
 
@@ -105,13 +105,15 @@ function App() {
   };
 
   const handleDeleteItem = (id) => {
-    return api
+    const token = localStorage.getItem("jwt");
+    console.log("token before deleteing", token);
+
+    api
       .deleteItem(id)
       .then(() => {
-        const updatedClothingItems = clothingItems.filter(
-          (item) => item._id !== id
+        setClothingItems((prevItems) =>
+          prevItems.filter((item) => item._id !== id)
         );
-        setClothingItems(updatedClothingItems);
       })
       .catch((error) => {
         console.error("Error deleting this item", error);
@@ -190,7 +192,10 @@ function App() {
     const token = localStorage.getItem("jwt");
     if (token) {
       getCurrentUser(token)
-        .then(() => setIsLoggedIn(true))
+        .then((data) => {
+          setIsLoggedIn(true);
+          setCurrentUser({ name: data.data.name, avatar: data.data.avatar });
+        })
         .catch(() => localStorage.removeItem("jwt"));
     }
   }, []);

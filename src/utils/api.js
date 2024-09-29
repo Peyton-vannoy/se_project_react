@@ -32,12 +32,9 @@ function addItem({ name, imageUrl, weather }) {
 }
 
 function deleteItem(id) {
-  return fetch(`${baseUrl}/items/${id}`, {
+  return fetchWithToken(`${baseUrl}/items/${id}`, {
     method: "DELETE",
-    headers: {
-      "Content-Type": "application/json",
-    },
-  }).then(handleServerResponse);
+  });
 }
 
 function updateUserProfile({ name, avatar }) {
