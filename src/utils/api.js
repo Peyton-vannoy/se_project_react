@@ -18,11 +18,8 @@ function getItems() {
 }
 
 function addItem({ name, imageUrl, weather }) {
-  return fetch(`${baseUrl}/items`, {
+  return fetchWithToken(`${baseUrl}/items`, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
     body: JSON.stringify({
       name,
       imageUrl,

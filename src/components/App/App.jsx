@@ -71,12 +71,6 @@ function App() {
     }));
   };
 
-  // const handleRegisterSuccess = (res) => {
-  //   login({ email: res.email, password: res.password }).catch((err) => {
-  //     console.error("Error logging in after registering", err);
-  //   });
-  // };
-
   const handleLoginSuccess = (res) => {
     const { email, name, avatar } = res || {};
 
@@ -96,11 +90,11 @@ function App() {
     api
       .addItem(values)
       .then((item) => {
-        setClothingItems([item, ...clothingItems]);
+        setClothingItems((prevItems) => [item.data, ...prevItems]);
         closeActiveModal();
       })
       .catch((err) => {
-        console.log(err);
+        console.error("Error adding item", err);
       });
   };
 
@@ -262,8 +256,8 @@ function App() {
             onLoginSuccess={handleLoginSuccess}
           />
           <AddItemModal
-            closeActiveModal={closeActiveModal}
             isOpen={activeModal === "add-garment"}
+            closeActiveModal={closeActiveModal}
             onAddItem={onAddItem}
           />
           <ItemModal

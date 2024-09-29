@@ -21,13 +21,6 @@ function Profile({
     setCurrentUser(null);
   };
 
-  const handleUpdateSuccess = (updatedUser) => {
-    setCurrentUser((prevUser) => ({
-      ...prevUser,
-      ...updatedUser,
-    }));
-  };
-
   return (
     <div className="profile">
       <section className="profile__sidebar">
