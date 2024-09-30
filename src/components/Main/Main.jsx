@@ -28,12 +28,6 @@ function Main({
                 return item.weather === weatherData.type;
               })
               .map((item) => (
-                // <ItemCard
-                //   key={item._id}
-                //   item={item}
-                //   onCardClick={onCardClick}
-                //   onCardLike={onCardLike}
-                // />
                 <ItemCard
                   key={item._id}
                   item={item}

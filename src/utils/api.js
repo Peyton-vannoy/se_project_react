@@ -53,7 +53,7 @@ function addCardLike({ itemId }) {
 }
 
 function removeCardLike({ itemId }) {
-  return fetch(`${baseUrl}/items/${itemId}/likes`, {
+  return fetchWithToken(`${baseUrl}/items/${itemId}/likes`, {
     method: "DELETE",
   });
 }

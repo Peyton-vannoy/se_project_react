@@ -80,7 +80,7 @@ function App() {
   };
 
   const handleLoginSuccess = (res) => {
-    const { email, name, avatar } = res || {};
+    const { email, name, avatar, _id } = res || {};
 
     console.log("Login response", res);
 
@@ -89,7 +89,7 @@ function App() {
     }
 
     setIsLoggedIn(true);
-    setCurrentUser({ name, avatar });
+    setCurrentUser({ name, avatar, _id });
     navigate("/");
     console.log("User data after login", { email, name, avatar });
   };
@@ -201,7 +201,11 @@ function App() {
       getCurrentUser(token)
         .then((data) => {
           setIsLoggedIn(true);
-          setCurrentUser({ name: data.data.name, avatar: data.data.avatar });
+          setCurrentUser({
+            name: data.data.name,
+            avatar: data.data.avatar,
+            _id: data.data._id,
+          });
         })
         .catch(() => localStorage.removeItem("jwt"));
     }
