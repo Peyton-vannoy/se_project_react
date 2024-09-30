@@ -128,12 +128,15 @@ function App() {
 
   const handleCardLike = ({ id, isLiked }) => {
     const token = localStorage.getItem("jwt");
-    console.log("Liking/unliking card:", id, "Current Like Status:", isLiked);
-    const apiCall = isLiked
-      ? api.removeCardLike(id, token)
-      : api.addCardLike(id, token);
 
-    apiCall
+    if (!token) {
+      console.log("No token found, please login");
+      return;
+    }
+    console.log("Liking/unliking card:", id, "Current Like Status:", isLiked);
+    const apiCall = isLiked ? api.removeCardLike : api.addCardLike;
+
+    apiCall(id, token)
       .then((updatedCard) => {
         console.log("API response:", updatedCard);
         setClothingItems((prevItems) =>
