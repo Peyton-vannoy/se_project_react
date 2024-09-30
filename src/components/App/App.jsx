@@ -128,24 +128,24 @@ function App() {
 
   const handleCardLike = ({ id, isLiked }) => {
     const token = localStorage.getItem("jwt");
-    console.log("token", token);
-    !isLiked
-      ? api
-          .addCardLike(id, token)
-          .then((updatedCard) => {
-            setClothingItems((cards) =>
-              cards.map((item) => (item._id === id ? updatedCard : item))
-            );
-          })
-          .catch((err) => console.error("Error adding card like", err))
-      : api
-          .removeCardLike(id, token)
-          .then((updatedCard) => {
-            setClothingItems((cards) =>
-              cards.map((item) => (item._id === id ? updatedCard : item))
-            );
-          })
-          .catch((err) => console.error("Error removing card like", err));
+    console.log("Liking/unliking card:", id, "Current Like Status:", isLiked);
+    const apiCall = isLiked
+      ? api.removeCardLike(id, token)
+      : api.addCardLike(id, token);
+
+    apiCall
+      .then((updatedCard) => {
+        console.log("API response:", updatedCard);
+        setClothingItems((prevItems) => {
+          console.log("Previous items:", prevItems);
+          const newItems = prevItems.map((item) =>
+            item._id === id ? updatedCard : item
+          );
+          console.log("New items:", newItems);
+          return newItems;
+        });
+      })
+      .catch((err) => console.error("Error adding card like", err));
   };
 
   const closeActiveModal = () => {

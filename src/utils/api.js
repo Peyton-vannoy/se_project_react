@@ -49,12 +49,18 @@ function updateUserProfile({ name, avatar }) {
 function addCardLike(id) {
   return fetchWithToken(`${baseUrl}/items/${id}/likes`, {
     method: "PUT",
+  }).then((res) => {
+    console.log("add like response:", res);
+    return res;
   });
 }
 
 function removeCardLike(id) {
   return fetchWithToken(`${baseUrl}/items/${id}/likes`, {
     method: "DELETE",
+  }).then((res) => {
+    console.log("remove like response:", res);
+    return res;
   });
 }
 
