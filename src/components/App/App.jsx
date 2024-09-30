@@ -126,26 +126,27 @@ function App() {
       });
   };
 
-  const handleCardLike = ({ id, isLiked }) => {
+  const handleCardLike = ({ itemId, isLiked }) => {
     const token = localStorage.getItem("jwt");
 
     if (!token) {
       console.log("No token found, please login");
       return;
     }
-    console.log("Liking/unliking card:", id, "Current Like Status:", isLiked);
+    console.log(
+      "Liking/unliking card:",
+      itemId,
+      "Current Like Status:",
+      isLiked
+    );
+
     const apiCall = isLiked ? api.removeCardLike : api.addCardLike;
 
-    apiCall(id, token)
-      .then((updatedCard) => {
-        console.log("API response:", updatedCard);
-        setClothingItems((prevItems) =>
-          prevItems.map((item) =>
-            item._id === id ? { ...item, likes: updatedCard.likes } : item
-          )
-        );
-      })
-      .catch((err) => console.error("Error adding card like", err));
+    apiCall({ itemId }).then((updatedItem) => {
+      setClothingItems((prevItems) =>
+        prevItems.map((item) => (item._id === itemId ? updatedItem.data : item))
+      );
+    });
   };
 
   const closeActiveModal = () => {

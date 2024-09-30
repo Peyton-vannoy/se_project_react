@@ -1,17 +1,21 @@
 import "./ItemCard.css";
 import { CurrentUserContext } from "../../contexts/CurrentUserContext";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 
 function ItemCard({ item, onCardClick, onCardLike }) {
   const currentUser = useContext(CurrentUserContext);
-  const isLiked = item?.likes?.some((id) => id === currentUser._id) || false;
+  const [isLiked, setIsLiked] = useState(false);
+
+  useEffect(() => {
+    setIsLiked(item.likes.some((id) => id === currentUser._id));
+  }, [item.likes, currentUser._id]);
 
   const likeButtonClassName = `card__like-button ${
     isLiked ? "card__like-button_active" : ""
   }`;
 
   const handleLikeClick = () => {
-    onCardLike({ id: item._id, isLiked });
+    onCardLike({ itemId: item._id, isLiked });
   };
 
   const handleCardClick = () => {

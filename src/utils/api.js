@@ -46,22 +46,16 @@ function updateUserProfile({ name, avatar }) {
   }).then(handleServerResponse);
 }
 
-function addCardLike(id, token) {
-  return fetch(`${baseUrl}/items/${id}/likes`, {
+function addCardLike({ itemId }) {
+  return fetchWithToken(`${baseUrl}/items/${itemId}/likes`, {
     method: "PUT",
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  }).then(handleServerResponse);
+  });
 }
 
-function removeCardLike(id, token) {
-  return fetch(`${baseUrl}/items/${id}/likes`, {
+function removeCardLike({ itemId }) {
+  return fetch(`${baseUrl}/items/${itemId}/likes`, {
     method: "DELETE",
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  }).then(handleServerResponse);
+  });
 }
 
 export {
