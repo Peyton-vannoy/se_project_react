@@ -136,14 +136,11 @@ function App() {
     apiCall
       .then((updatedCard) => {
         console.log("API response:", updatedCard);
-        setClothingItems((prevItems) => {
-          console.log("Previous items:", prevItems);
-          const newItems = prevItems.map((item) =>
-            item._id === id ? updatedCard : item
-          );
-          console.log("New items:", newItems);
-          return newItems;
-        });
+        setClothingItems((prevItems) =>
+          prevItems.map((item) =>
+            item._id === id ? { ...item, likes: updatedCard.likes } : item
+          )
+        );
       })
       .catch((err) => console.error("Error adding card like", err));
   };
