@@ -1,4 +1,6 @@
 import "./ItemCard.css";
+import likeImg from "../../images/like__btn-active.svg";
+import unlikeImg from "../../images/like__btn-inactive.svg";
 import { CurrentUserContext } from "../../contexts/CurrentUserContext";
 import { useContext, useEffect, useState } from "react";
 
@@ -26,10 +28,11 @@ function ItemCard({ item, onCardClick, onCardLike }) {
       <div className="card__title-container">
         <h2 className="card__title-heading">{item.name}</h2>
         {currentUser && (
-          <button
+          <img
+            src={isLiked ? likeImg : unlikeImg}
             className={likeButtonClassName}
             onClick={handleLikeClick}
-          ></button>
+          />
         )}
       </div>
       <img
