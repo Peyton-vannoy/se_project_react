@@ -43,7 +43,7 @@ function EditProfileModal({ isOpen, onClose, onUpdateSuccess }) {
         required
       />
       <label className="modal__label" htmlFor="avatar">
-        Avatar
+        Avatar*
       </label>
       <input
         className="modal__input"
@@ -53,6 +53,7 @@ function EditProfileModal({ isOpen, onClose, onUpdateSuccess }) {
         placeholder="Avatar URL"
         value={avatar}
         onChange={(e) => setAvatar(e.target.value)}
+        required
       />
     </ModalWithForm>
   );

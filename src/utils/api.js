@@ -25,7 +25,7 @@ function addItem({ name, imageUrl, weather }) {
       imageUrl,
       weather,
     }),
-  }).then(handleServerResponse);
+  });
 }
 
 function deleteItem(id) {
@@ -46,24 +46,16 @@ function updateUserProfile({ name, avatar }) {
   }).then(handleServerResponse);
 }
 
-function addCardLike(id, token) {
-  return fetch(`${baseUrl}/items/${id}/likes`, {
+function addCardLike(id) {
+  return fetchWithToken(`${baseUrl}/items/${id}/likes`, {
     method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
-  }).then(handleServerResponse);
+  });
 }
 
-function removeCardLike(id, token) {
-  return fetch(`${baseUrl}/items/${id}/likes`, {
+function removeCardLike(id) {
+  return fetchWithToken(`${baseUrl}/items/${id}/likes`, {
     method: "DELETE",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
-  }).then(handleServerResponse);
+  });
 }
 
 export {

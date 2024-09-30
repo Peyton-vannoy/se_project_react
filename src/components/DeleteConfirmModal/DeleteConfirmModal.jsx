@@ -1,5 +1,5 @@
 import "./DeleteConfirmModal.css";
-import closeItemIcon from "../../images/item-modal-close-btn.svg";
+import closeItemIcon from "../../images/modal-close-btn.svg";
 
 function DeleteConfirmModal({ isOpen, handleCloseClick, onDelete, card }) {
   return (
@@ -10,7 +10,7 @@ function DeleteConfirmModal({ isOpen, handleCloseClick, onDelete, card }) {
           className="modal__close"
           type="button"
         >
-          <img src={closeItemIcon} alt="close" />
+          <img src={closeItemIcon} className="modal__close-icon" alt="close" />
         </button>
         <p className="modal__heading-delete">
           Are you sure you want to delete this item? This action is

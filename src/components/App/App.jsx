@@ -11,6 +11,7 @@ import AddItemModal from "../AddItemModal/AddItemModal";
 import LoginModal from "../LoginModal/LoginModal";
 import RegisterModal from "../RegisterModal/RegisterModal";
 import ProtectedRoute from "../ProtectedRoute/ProtectedRoute";
+import DeleteConfirmModal from "../DeleteConfirmModal/DeleteConfirmModal";
 
 import { filterWeatherData, getWeather } from "../../utils/weatherApi";
 import { CurrentTemperatureUnitContext } from "../../contexts/CurrentTemperatureUnitContext";
@@ -29,11 +30,13 @@ function App() {
   const [selectedCard, setSelectedCard] = useState({});
   const [currentTemperatureUnit, setCurrentTemperatureUnit] = useState("F");
   const [clothingItems, setClothingItems] = useState([]);
-  const [isLoggedIn, setIsLoggedIn] = useState(true);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const [currentUser, setCurrentUser] = useState({ name: "", avatar: "" });
   const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [itemToDelete, setItemToDelete] = useState(null);
 
   const handleCardClick = (card) => {
     setActiveModal("preview");
@@ -41,6 +44,11 @@ function App() {
   };
   const handleAddClick = () => {
     setActiveModal("add-garment");
+  };
+
+  const openConfirmModal = (item) => {
+    setItemToDelete(item);
+    setIsDeleteModalOpen(true);
   };
 
   const handleRegister = ({ name, email, avatar, password }) => {
@@ -98,16 +106,20 @@ function App() {
       });
   };
 
-  const handleDeleteItem = (id) => {
-    const token = localStorage.getItem("jwt");
-    console.log("token before deleteing", token);
+  const handleDeleteItem = (item) => {
+    if (!item || !item._id) {
+      console.error("Invalid item for deletion", item);
+      return;
+    }
 
     api
-      .deleteItem(id)
+      .deleteItem(item._id)
       .then(() => {
         setClothingItems((prevItems) =>
-          prevItems.filter((item) => item._id !== id)
+          prevItems.filter((i) => i._id !== item._id)
         );
+        setIsDeleteModalOpen(false);
+        setItemToDelete(null);
       })
       .catch((error) => {
         console.error("Error deleting this item", error);
@@ -223,6 +235,7 @@ function App() {
                     onCardClick={handleCardClick}
                     clothingItems={clothingItems}
                     onCardLike={handleCardLike}
+                    isLoggedIn={isLoggedIn}
                   />
                 }
               />
@@ -264,7 +277,14 @@ function App() {
             card={selectedCard}
             onClose={closeActiveModal}
             isOpen={activeModal === "preview"}
+            openConfirmModal={openConfirmModal}
             handleDeleteItem={handleDeleteItem}
+          />
+          <DeleteConfirmModal
+            isOpen={isDeleteModalOpen ? "delete-garment" : ""}
+            handleCloseClick={() => setIsDeleteModalOpen(false)}
+            onDelete={handleDeleteItem}
+            card={itemToDelete}
           />
         </CurrentTemperatureUnitContext.Provider>
       </div>

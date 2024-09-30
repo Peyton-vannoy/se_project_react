@@ -8,9 +8,8 @@
   border-radius: 20px;
 }
 
-.card__title {
+.card__title-heading {
   margin: 0;
-  position: absolute;
   top: 15px;
   font-family: "Cabinet Grotesk", sans-serif;
   font-size: 16px;
@@ -28,11 +27,21 @@
   border-radius: 20px;
 }
 
-.card__like-button {
+.card__title-container {
   position: absolute;
   top: 15px;
-  right: 15px;
-  background-color: transparent;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.card__like-button {
+  background-image: url(../../images/like__btn-inactive.svg);
+  background-repeat: no-repeat;
   border: none;
-  cursor: pointer;
+  width: 18px;
+  height: 15px;
+  background-color: transparent;
+  background-size: contain;
+  background-position: center;
 }
