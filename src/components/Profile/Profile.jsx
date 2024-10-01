@@ -11,6 +11,7 @@ function Profile({
   handleAddClick,
   setIsLoggedIn,
   onUpdateSuccess,
+  onCardLike,
 }) {
   const { currentUser, setCurrentUser } = useContext(CurrentUserContext);
   const [isEditProfileModalOpen, setIsEditProfileModalOpen] = useState(false);
@@ -42,6 +43,7 @@ function Profile({
           onCardClick={onCardClick}
           clothingItems={clothingItems}
           handleAddClick={handleAddClick}
+          onCardLike={onCardLike}
         />
       </section>
       <EditProfileModal

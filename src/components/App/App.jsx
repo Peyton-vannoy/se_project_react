@@ -254,6 +254,7 @@ function App() {
                       clothingItems={clothingItems}
                       setIsLoggedIn={setIsLoggedIn}
                       onUpdateSuccess={handleUpdateSuccess}
+                      onCardLike={handleCardLike}
                     />
                   </ProtectedRoute>
                 }
