@@ -1,5 +1,5 @@
 import { useState, useContext } from "react";
-import { CurrentUserContext } from "../../contexts/CurrentUserContext";
+// import { CurrentUserContext } from "../../contexts/CurrentUserContext";
 import "./Profile.css";
 import SideBar from "../SideBar/SideBar";
 import ClothesSection from "../ClothesSection/ClothesSection";
@@ -15,7 +15,7 @@ function Profile({
   onCardLike,
   isLoggedIn,
 }) {
-  const { currentUser, setCurrentUser } = useContext(CurrentUserContext);
+  // const { currentUser, setCurrentUser } = useContext(CurrentUserContext);
   const [isEditProfileModalOpen, setIsEditProfileModalOpen] = useState(false);
   const navigate = useNavigate();
 

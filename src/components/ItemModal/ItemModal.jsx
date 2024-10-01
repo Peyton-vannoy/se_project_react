@@ -3,7 +3,7 @@ import closeItemIcon from "../../images/item-modal-close-btn.svg";
 import { CurrentUserContext } from "../../contexts/CurrentUserContext";
 import { useContext } from "react";
 
-function ItemModal({ onClose, card, isOpen, openConfirmModal }) {
+function ItemModal({ onClose, card, isOpen, openConfirmModal, isLoggedIn }) {
   const currentUser = useContext(CurrentUserContext);
   const isOwn = card.owner === currentUser?._id;
 
@@ -31,13 +31,15 @@ function ItemModal({ onClose, card, isOpen, openConfirmModal }) {
           <div className="modal__footer">
             <h2 className="modal__caption">{card.name}</h2>
             <p className="modal__weather">Weather: {card.weather}</p>
-            <button
-              type="button"
-              className={itemDeleteButtonClassName}
-              onClick={handleDeleteClick}
-            >
-              Delete item
-            </button>
+            {isLoggedIn && (
+              <button
+                type="button"
+                className={itemDeleteButtonClassName}
+                onClick={handleDeleteClick}
+              >
+                Delete item
+              </button>
+            )}
           </div>
         </div>
       </div>

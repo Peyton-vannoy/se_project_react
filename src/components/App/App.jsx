@@ -90,7 +90,7 @@ function App() {
 
     setIsLoggedIn(true);
     setCurrentUser({ name, avatar, _id });
-    navigate("/");
+    navigate("/profile");
     console.log("User data after login", { email, name, avatar });
 
     api.getItems().then(({ data }) => {
@@ -276,11 +276,13 @@ function App() {
             isOpen={isRegisterModalOpen}
             onClose={() => setIsRegisterModalOpen(false)}
             onRegisterSuccess={handleRegister}
+            setIsLoginModalOpen={setIsLoginModalOpen}
           />
           <LoginModal
             isOpen={isLoginModalOpen}
             onClose={() => setIsLoginModalOpen(false)}
             onLoginSuccess={handleLoginSuccess}
+            setIsRegisterModalOpen={setIsRegisterModalOpen}
           />
           <AddItemModal
             isOpen={activeModal === "add-garment"}
@@ -293,6 +295,7 @@ function App() {
             isOpen={activeModal === "preview"}
             openConfirmModal={openConfirmModal}
             handleDeleteItem={handleDeleteItem}
+            isLoggedIn={isLoggedIn}
           />
           <DeleteConfirmModal
             isOpen={isDeleteModalOpen ? "delete-garment" : ""}

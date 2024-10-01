@@ -1,24 +1,48 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import ModalWithForm from "../ModalWithForm/ModalWithForm";
 import "./RegisterModal";
+import "./RegisterModal.css";
 
-function RegisterModal({ isOpen, onClose, onRegisterSuccess }) {
+function RegisterModal({
+  isOpen,
+  onClose,
+  onRegisterSuccess,
+  setIsLoginModalOpen,
+}) {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [avatar, setAvatar] = useState("");
 
+  const isFormValid = email && password && name && avatar;
+
   const handleSubmit = (e) => {
     e.preventDefault();
     onRegisterSuccess({ name, email, password, avatar });
   };
+
+  const handleLoginClick = () => {
+    onClose();
+    setIsLoginModalOpen(true);
+  };
+
+  useEffect(() => {
+    if (!isOpen) {
+      setName("");
+      setEmail("");
+      setPassword("");
+      setAvatar("");
+    }
+  }, [isOpen]);
+
   return (
     <ModalWithForm
       isOpen={isOpen}
       title="Sign up"
-      buttonText="Next"
+      buttonText="Sign Up"
       onSubmit={handleSubmit}
       onClose={onClose}
+      disabled={!isFormValid}
     >
       <label className="modal__label" htmlFor="email">
         Email*
@@ -57,7 +81,7 @@ function RegisterModal({ isOpen, onClose, onRegisterSuccess }) {
         required
       />
       <label className="modal__label" htmlFor="avatar">
-        Avatar Url
+        Avatar Url*
       </label>
       <input
         name="avatar"
@@ -68,6 +92,13 @@ function RegisterModal({ isOpen, onClose, onRegisterSuccess }) {
         onChange={(e) => setAvatar(e.target.value)}
         required
       />
+      <button
+        className="modal__login-btn"
+        type="button"
+        onClick={handleLoginClick}
+      >
+        or Log In
+      </button>
     </ModalWithForm>
   );
 }

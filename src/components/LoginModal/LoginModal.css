@@ -1,0 +1,17 @@
+.modal__register-btn {
+  position: relative;
+  font-family: "Cabinet Grotesk", sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 20px;
+  padding: 0;
+  top: 54px;
+  left: 79px;
+  margin-left: 12px;
+  border: none;
+  background-color: transparent;
+  width: 80px;
+  height: 20px;
+  cursor: pointer;
+  opacity: 50%;
+}

@@ -1,8 +1,14 @@
 import React, { useState } from "react";
 import ModalWithForm from "../ModalWithForm/ModalWithForm";
+import "./LoginModal.css";
 import { login } from "../../utils/auth";
 
-function LoginModal({ isOpen, onClose, onLoginSuccess }) {
+function LoginModal({
+  isOpen,
+  onClose,
+  onLoginSuccess,
+  setIsRegisterModalOpen,
+}) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -19,11 +25,16 @@ function LoginModal({ isOpen, onClose, onLoginSuccess }) {
       });
   };
 
+  const handleSignupClick = () => {
+    onClose();
+    setIsRegisterModalOpen(true);
+  };
+
   return (
     <ModalWithForm
       isOpen={isOpen}
       title="Log in"
-      buttonText="Next"
+      buttonText="Log in"
       onSubmit={handleSubmit}
       onClose={onClose}
     >
@@ -51,6 +62,13 @@ function LoginModal({ isOpen, onClose, onLoginSuccess }) {
         onChange={(e) => setPassword(e.target.value)}
         required
       />
+      <button
+        type="button"
+        className="modal__register-btn"
+        onClick={handleSignupClick}
+      >
+        or Sign up
+      </button>
     </ModalWithForm>
   );
 }
