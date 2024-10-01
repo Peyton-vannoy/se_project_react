@@ -4,6 +4,7 @@ import "./Profile.css";
 import SideBar from "../SideBar/SideBar";
 import ClothesSection from "../ClothesSection/ClothesSection";
 import EditProfileModal from "../EditProfileModal/EditProfileModal";
+import { useNavigate } from "react-router-dom";
 
 function Profile({
   onCardClick,
@@ -12,14 +13,16 @@ function Profile({
   setIsLoggedIn,
   onUpdateSuccess,
   onCardLike,
+  isLoggedIn,
 }) {
   const { currentUser, setCurrentUser } = useContext(CurrentUserContext);
   const [isEditProfileModalOpen, setIsEditProfileModalOpen] = useState(false);
+  const navigate = useNavigate();
 
   const handleLogout = () => {
     localStorage.removeItem("jwt");
     setIsLoggedIn(false);
-    setCurrentUser(null);
+    navigate("/");
   };
 
   return (
@@ -44,6 +47,7 @@ function Profile({
           clothingItems={clothingItems}
           handleAddClick={handleAddClick}
           onCardLike={onCardLike}
+          isLoggedIn={isLoggedIn}
         />
       </section>
       <EditProfileModal

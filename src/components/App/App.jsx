@@ -217,7 +217,9 @@ function App() {
 
   //console.log(currentTemperatureUnit);
   return (
-    <CurrentUserContext.Provider value={{ currentUser, setCurrentUser }}>
+    <CurrentUserContext.Provider
+      value={{ currentUser: currentUser || null, setCurrentUser }}
+    >
       <div className="page">
         <CurrentTemperatureUnitContext.Provider
           value={{ currentTemperatureUnit, handleToggleSwitchChange }}
@@ -255,6 +257,7 @@ function App() {
                       setIsLoggedIn={setIsLoggedIn}
                       onUpdateSuccess={handleUpdateSuccess}
                       onCardLike={handleCardLike}
+                      isLoggedIn={isLoggedIn}
                     />
                   </ProtectedRoute>
                 }

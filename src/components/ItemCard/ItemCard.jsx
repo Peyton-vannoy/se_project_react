@@ -4,12 +4,14 @@ import unlikeImg from "../../images/like__btn-inactive.svg";
 import { CurrentUserContext } from "../../contexts/CurrentUserContext";
 import { useContext, useEffect, useState } from "react";
 
-function ItemCard({ item, onCardClick, onCardLike }) {
+function ItemCard({ item, onCardClick, onCardLike, isLoggedIn }) {
   const { currentUser } = useContext(CurrentUserContext);
   const [isLiked, setIsLiked] = useState(false);
 
   useEffect(() => {
-    setIsLiked(item.likes.some((id) => id === currentUser._id));
+    if (currentUser && item.likes) {
+      setIsLiked(item.likes.some((id) => id === currentUser._id));
+    }
   }, [item.likes, currentUser._id]);
 
   const likeButtonClassName = `card__like-button ${
@@ -27,7 +29,7 @@ function ItemCard({ item, onCardClick, onCardLike }) {
     <li className="card">
       <div className="card__title-container">
         <h2 className="card__title-heading">{item.name}</h2>
-        {currentUser && (
+        {isLoggedIn && (
           <img
             src={isLiked ? likeImg : unlikeImg}
             className={likeButtonClassName}

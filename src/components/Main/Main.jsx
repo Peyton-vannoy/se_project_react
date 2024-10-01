@@ -32,6 +32,7 @@ function Main({
                 item={item}
                 onCardClick={onCardClick}
                 onCardLike={onCardLike}
+                isLoggedIn={isLoggedIn}
               />
             ))}
         </ul>
