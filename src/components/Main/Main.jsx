@@ -22,24 +22,18 @@ function Main({
           {currentTemperatureUnit} / You may want to wear:
         </p>
         <ul className="cards__list">
-          {isLoggedIn ? (
-            clothingItems
-              .filter((item) => {
-                return item.weather === weatherData.type;
-              })
-              .map((item) => (
-                <ItemCard
-                  key={item._id}
-                  item={item}
-                  onCardClick={onCardClick}
-                  onCardLike={onCardLike}
-                />
-              ))
-          ) : (
-            <li className="cards__login-message">
-              <p>Please log in to view clothing items.</p>
-            </li>
-          )}
+          {clothingItems
+            .filter((item) => {
+              return item.weather === weatherData.type;
+            })
+            .map((item) => (
+              <ItemCard
+                key={item._id}
+                item={item}
+                onCardClick={onCardClick}
+                onCardLike={onCardLike}
+              />
+            ))}
         </ul>
       </section>
     </main>
