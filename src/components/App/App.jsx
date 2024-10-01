@@ -92,6 +92,11 @@ function App() {
     setCurrentUser({ name, avatar, _id });
     navigate("/");
     console.log("User data after login", { email, name, avatar });
+
+    api.getItems().then(({ data }) => {
+      setClothingItems(data);
+      window.location.reload();
+    });
   };
 
   const onAddItem = (values) => {
