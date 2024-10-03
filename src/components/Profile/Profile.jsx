@@ -16,6 +16,7 @@ function Profile({
   onCardLike,
   isLoggedIn,
   isLoading,
+  handleSubmit,
   updateUserProfile,
 }) {
   // const { currentUser, setCurrentUser } = useContext(CurrentUserContext);
@@ -51,6 +52,7 @@ function Profile({
           handleAddClick={handleAddClick}
           onCardLike={onCardLike}
           isLoggedIn={isLoggedIn}
+          handleSubmit={handleSubmit}
         />
       </section>
       <EditProfileModal
@@ -59,6 +61,7 @@ function Profile({
         onUpdateSuccess={onUpdateSuccess}
         updateUserProfile={updateUserProfile}
         isLoading={isLoading}
+        handleSubmit={handleSubmit}
       />
     </div>
   );

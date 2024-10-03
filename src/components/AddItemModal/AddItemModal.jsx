@@ -1,7 +1,13 @@
 import React, { useEffect, useState } from "react";
 import ModalWithForm from "../ModalWithForm/ModalWithForm";
 
-const AddItemModal = ({ isOpen, closeActiveModal, onAddItem, isLoading }) => {
+const AddItemModal = ({
+  isOpen,
+  closeActiveModal,
+  onAddItem,
+  isLoading,
+  handleSubmit,
+}) => {
   const [name, setName] = useState("");
   const [imageUrl, setImageUrl] = useState("");
   const [weather, setWeather] = useState("");
@@ -28,10 +34,12 @@ const AddItemModal = ({ isOpen, closeActiveModal, onAddItem, isLoading }) => {
     setWeather(e.target.value);
   };
 
-  const handleSubmit = (e) => {
+  const handleFormSubmit = (e) => {
     e.preventDefault();
-    console.log("Submitting", { name, imageUrl, weather });
-    onAddItem({ name, imageUrl, weather });
+    const makeRequest = () => {
+      return Promise.resolve(onAddItem({ name, imageUrl, weather }));
+    };
+    handleSubmit(makeRequest);
   };
 
   return (
@@ -40,7 +48,7 @@ const AddItemModal = ({ isOpen, closeActiveModal, onAddItem, isLoading }) => {
       title="New garment"
       onClose={closeActiveModal}
       isOpen={isOpen}
-      onSubmit={handleSubmit}
+      onSubmit={handleFormSubmit}
     >
       <label className="modal__label">
         {" Name "}

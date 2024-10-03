@@ -3,21 +3,26 @@ import ModalWithForm from "../ModalWithForm/ModalWithForm";
 import "./LoginModal.css";
 import { login } from "../../utils/auth";
 
-function LoginModal({ isOpen, onClose, onLoginSuccess, openRegisterModal }) {
+function LoginModal({
+  isOpen,
+  onClose,
+  onLoginSuccess,
+  openRegisterModal,
+  handleSubmit,
+}) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleSubmit = (e) => {
+  const handleFormSubmit = (e) => {
     e.preventDefault();
-    login({ email, password })
-      .then((res) => {
+    const makeRequest = () => {
+      return Promise.resolve(login({ email, password })).then((res) => {
         localStorage.setItem("jwt", res.token);
         onLoginSuccess(res);
         onClose();
-      })
-      .catch((err) => {
-        console.error("Error logging in user:", err);
       });
+    };
+    handleSubmit(makeRequest);
   };
 
   const handleSignupClick = () => {
@@ -30,35 +35,35 @@ function LoginModal({ isOpen, onClose, onLoginSuccess, openRegisterModal }) {
       isOpen={isOpen}
       title="login"
       buttonText="Log in"
-      onSubmit={handleSubmit}
+      onSubmit={handleFormSubmit}
       onClose={onClose}
     >
-      <label className="modal__label" htmlFor="email">
+      <label className="modal__label">
         Email*
+        <input
+          name="email"
+          id="email"
+          className="modal__input"
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+        />
       </label>
-      <input
-        name="email"
-        id="email"
-        className="modal__input"
-        type="email"
-        placeholder="Email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        required
-      />
-      <label className="modal__label" htmlFor="password">
+      <label className="modal__label">
         Password*
+        <input
+          name="password"
+          id="password"
+          className="modal__input"
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+        />
       </label>
-      <input
-        name="password"
-        id="password"
-        className="modal__input"
-        type="password"
-        placeholder="Password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        required
-      />
       <button
         type="button"
         className="modal__register-btn"

@@ -42,6 +42,14 @@ function App() {
   const [itemToDelete, setItemToDelete] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
+  const handleSubmit = (request) => {
+    setIsLoading(true);
+    request()
+      .then(closeActiveModal)
+      .catch(console.error)
+      .finally(() => setIsLoading(false));
+  };
+
   // Modal Handlers
   const handleCardClick = (card) => {
     setActiveModal("preview");
@@ -70,49 +78,52 @@ function App() {
 
   // User Handlers
   const handleRegister = ({ name, email, avatar, password }) => {
-    register({ name, email, avatar, password })
-      .then(() => {
-        return login({ email, password });
-      })
-      .then((loginRes) => {
-        setIsLoggedIn(true);
-        setCurrentUser({ name, avatar });
-        localStorage.setItem("jwt", loginRes.token);
-        navigate("/");
-        setActiveModal("");
-      })
-      .catch((err) => {
-        if (err.status === 409) {
-          console.error("User already exists, Please use a different email");
-        } else {
-          console.error("Error registering user", err);
-        }
-      });
+    const makeRequest = () => {
+      return register({ name, email, avatar, password })
+        .then(() => {
+          return login({ email, password });
+        })
+        .then((loginRes) => {
+          setIsLoggedIn(true);
+          setCurrentUser({ name, avatar });
+          localStorage.setItem("jwt", loginRes.token);
+          navigate("/");
+          closeActiveModal();
+        });
+    };
+    handleSubmit(makeRequest);
   };
 
   const handleLoginSuccess = (res) => {
-    const { email, name, avatar, _id } = res || {};
+    const makeRequest = () => {
+      const { email, name, avatar, _id } = res || {};
 
-    console.log("Login response", res);
+      console.log("Login response", res);
 
-    if (!email || !name || !avatar || !_id) {
-      return;
-    }
+      if (!email || !name || !avatar || !_id) {
+        return Promise.reject("Invalid Login response");
+      }
 
-    setIsLoggedIn(true);
-    setCurrentUser({ name, avatar, _id });
-    fetchClothingItems();
-    navigate("/profile");
-    console.log("User data after login", { email, name, avatar, _id });
+      setIsLoggedIn(true);
+      setCurrentUser({ name, avatar, _id });
+      fetchClothingItems();
+      navigate("/profile");
+      // console.log("User data after login", { email, name, avatar, _id });
+      return Promise.resolve();
+    };
+    handleSubmit(makeRequest);
   };
 
   const handleUpdateSuccess = (updatedUser) => {
-    setIsLoading(true);
-    setCurrentUser((prevUser) => ({
-      ...prevUser,
-      ...updatedUser.data,
-    }));
-    setIsLoading(false);
+    const makeRequest = () => {
+      return Promise.resolve().then(() => {
+        setCurrentUser((prevUser) => ({
+          ...prevUser,
+          ...updatedUser.data,
+        }));
+      });
+    };
+    handleSubmit(makeRequest);
   };
 
   const updateUserProfile = ({ name, avatar }) => {
@@ -125,29 +136,23 @@ function App() {
           name: res.data.name,
           avatar: res.data.avatar,
         }));
-        setIsLoading(false);
+        return res;
       })
       .catch((err) => {
-        console.error("Error updating profile:", err);
-        setIsLoading(false);
-      });
+        console.error("Error updating profile", err);
+        throw err;
+      })
+      .finally(() => setIsLoading(false));
   };
 
   // Item Handlers
   const onAddItem = (values) => {
-    setIsLoading(true);
-    api
-      .addItem(values)
-      .then((item) => {
+    const makeRequest = () => {
+      return api.addItem(values).then((item) => {
         setClothingItems((prevItems) => [item.data, ...prevItems]);
-        closeActiveModal();
-      })
-      .catch((err) => {
-        console.error("Error adding item", err);
-      })
-      .finally(() => {
-        setIsLoading(false);
       });
+    };
+    handleSubmit(makeRequest);
   };
 
   const fetchClothingItems = () => {
@@ -167,18 +172,15 @@ function App() {
       return;
     }
 
-    api
-      .deleteItem(item._id)
-      .then(() => {
+    const makeRequest = () => {
+      return api.deleteItem(item._id).then(() => {
         setClothingItems((prevItems) =>
           prevItems.filter((i) => i._id !== item._id)
         );
-        closeActiveModal();
         setItemToDelete(null);
-      })
-      .catch((error) => {
-        console.error("Error deleting this item", error);
       });
+    };
+    handleSubmit(makeRequest);
   };
 
   const handleCardLike = ({ itemId, isLiked }) => {
@@ -188,26 +190,19 @@ function App() {
       console.log("No token found, please login");
       return;
     }
-    console.log(
-      "Liking/unliking card:",
-      itemId,
-      "Current Like Status:",
-      isLiked
-    );
 
-    const apiCall = isLiked ? api.removeCardLike : api.addCardLike;
+    const makeRequest = () => {
+      const apiCall = isLiked ? api.removeCardLike : api.addCardLike;
 
-    apiCall({ itemId })
-      .then((updatedItem) => {
+      return apiCall({ itemId }).then((updatedItem) => {
         setClothingItems((prevItems) =>
           prevItems.map((item) =>
             item._id === itemId ? updatedItem.data : item
           )
         );
-      })
-      .catch((err) => {
-        console.error("Error updating like status", err);
       });
+    };
+    handleSubmit(makeRequest);
   };
 
   // Effects
@@ -254,9 +249,7 @@ function App() {
   }, []);
 
   useEffect(() => {
-    if (currentUser._id) {
-      fetchClothingItems();
-    }
+    fetchClothingItems();
   }, [currentUser]);
 
   useEffect(() => {
@@ -312,6 +305,7 @@ function App() {
                       onCardLike={handleCardLike}
                       isLoggedIn={isLoggedIn}
                       isLoading={isLoading}
+                      handleSubmit={handleSubmit}
                     />
                   </ProtectedRoute>
                 }
@@ -325,18 +319,21 @@ function App() {
             onClose={closeActiveModal}
             onRegisterSuccess={handleRegister}
             openLoginModal={openLoginModal}
+            handleSubmit={handleSubmit}
           />
           <LoginModal
             isOpen={activeModal === "login"}
             onClose={closeActiveModal}
             onLoginSuccess={handleLoginSuccess}
             openRegisterModal={openRegisterModal}
+            handleSubmit={handleSubmit}
           />
           <AddItemModal
             isOpen={activeModal === "add-garment"}
             closeActiveModal={closeActiveModal}
             onAddItem={onAddItem}
             isLoading={isLoading}
+            handleSubmit={handleSubmit}
           />
           <ItemModal
             card={selectedCard}

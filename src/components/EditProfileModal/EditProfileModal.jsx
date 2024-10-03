@@ -3,7 +3,13 @@ import { CurrentUserContext } from "../../contexts/CurrentUserContext";
 import ModalWithForm from "../ModalWithForm/ModalWithForm";
 import * as api from "../../utils/api";
 
-function EditProfileModal({ isOpen, onClose, updateUserProfile, isLoading }) {
+function EditProfileModal({
+  isOpen,
+  onClose,
+  updateUserProfile,
+  isLoading,
+  handleSubmit,
+}) {
   const { currentUser } = useContext(CurrentUserContext);
   const [name, setName] = useState(currentUser?.name || "");
   const [avatar, setAvatar] = useState(currentUser?.avatar || "");
@@ -15,23 +21,21 @@ function EditProfileModal({ isOpen, onClose, updateUserProfile, isLoading }) {
     }
   }, [isOpen, currentUser]);
 
-  const handleSubmit = (e) => {
+  const handleFormSubmit = (e) => {
     e.preventDefault();
-
-    console.log("Updating user profile with:", { name, avatar });
-    updateUserProfile({ name, avatar })
-      .then(() => {
+    const makeRequest = () => {
+      return Promise.resolve(updateUserProfile({ name, avatar })).then(() => {
         onClose();
-      })
-      .catch((err) => {
-        console.error("Error updating user profile", err);
       });
+    };
+    handleSubmit(makeRequest);
   };
+
   return (
     <ModalWithForm
       isOpen={isOpen}
       onClose={onClose}
-      onSubmit={handleSubmit}
+      onSubmit={handleFormSubmit}
       title="Change profile data"
       buttonText={isLoading ? "Saving..." : "Save changes"}
     >

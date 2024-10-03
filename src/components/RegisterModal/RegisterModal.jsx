@@ -3,7 +3,13 @@ import ModalWithForm from "../ModalWithForm/ModalWithForm";
 import "./RegisterModal";
 import "./RegisterModal.css";
 
-function RegisterModal({ isOpen, onClose, onRegisterSuccess, openLoginModal }) {
+function RegisterModal({
+  isOpen,
+  onClose,
+  onRegisterSuccess,
+  openLoginModal,
+  handleSubmit,
+}) {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -11,9 +17,12 @@ function RegisterModal({ isOpen, onClose, onRegisterSuccess, openLoginModal }) {
 
   const isFormValid = email && password && name && avatar;
 
-  const handleSubmit = (e) => {
+  const handleFormSubmit = (e) => {
     e.preventDefault();
-    onRegisterSuccess({ name, email, password, avatar });
+    const makeRequest = () => {
+      return onRegisterSuccess({ name, email, password, avatar });
+    };
+    handleSubmit(makeRequest);
   };
 
   const handleLoginClick = () => {
@@ -35,7 +44,7 @@ function RegisterModal({ isOpen, onClose, onRegisterSuccess, openLoginModal }) {
       isOpen={isOpen}
       title="register"
       buttonText="Sign Up"
-      onSubmit={handleSubmit}
+      onSubmit={handleFormSubmit}
       onClose={onClose}
       disabled={!isFormValid}
     >
