@@ -317,7 +317,6 @@ function App() {
                 }
               />
             </Routes>
-
             <Footer />
           </div>
 
