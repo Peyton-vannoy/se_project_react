@@ -33,6 +33,7 @@ export const login = ({ email, password }) => {
         name: data.name,
         avatar: data.avatar,
         token: data.token,
+        _id: data._id,
       };
     });
 };

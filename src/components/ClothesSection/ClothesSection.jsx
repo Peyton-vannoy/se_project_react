@@ -12,6 +12,8 @@ function ClothesSection({
 }) {
   const { currentUser } = useContext(CurrentUserContext);
 
+  // console.log("Current User:", currentUser);
+
   const userClothingItems = clothingItems.filter(
     (item) => item.owner === currentUser?._id
   );

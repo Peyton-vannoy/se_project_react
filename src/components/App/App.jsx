@@ -34,7 +34,11 @@ function App() {
   const [currentTemperatureUnit, setCurrentTemperatureUnit] = useState("F");
   const [clothingItems, setClothingItems] = useState([]);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [currentUser, setCurrentUser] = useState({ name: "", avatar: "" });
+  const [currentUser, setCurrentUser] = useState({
+    name: "",
+    avatar: "",
+    _id: "",
+  });
   const [itemToDelete, setItemToDelete] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -91,7 +95,7 @@ function App() {
 
     console.log("Login response", res);
 
-    if (!email || !name || !avatar) {
+    if (!email || !name || !avatar || !_id) {
       return;
     }
 
@@ -99,7 +103,7 @@ function App() {
     setCurrentUser({ name, avatar, _id });
     fetchClothingItems();
     navigate("/profile");
-    console.log("User data after login", { email, name, avatar });
+    console.log("User data after login", { email, name, avatar, _id });
   };
 
   const handleUpdateSuccess = (updatedUser) => {
@@ -150,7 +154,6 @@ function App() {
     api
       .getItems()
       .then(({ data }) => {
-        console.log("Fetched Clothing Items:", data);
         setClothingItems(data);
       })
       .catch((err) => {
@@ -235,12 +238,6 @@ function App() {
   }, []);
 
   useEffect(() => {
-    if (isLoggedIn) {
-      fetchClothingItems();
-    }
-  }, [isLoggedIn]);
-
-  useEffect(() => {
     const token = localStorage.getItem("jwt");
     if (token) {
       getCurrentUser(token)
@@ -255,6 +252,12 @@ function App() {
         .catch(() => localStorage.removeItem("jwt"));
     }
   }, []);
+
+  useEffect(() => {
+    if (currentUser._id) {
+      fetchClothingItems();
+    }
+  }, [currentUser]);
 
   useEffect(() => {
     console.log("is Logged In", isLoggedIn);
