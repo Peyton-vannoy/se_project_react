@@ -11,8 +11,8 @@ function Header({
   handleAddClick,
   weatherData,
   isLoggedIn,
-  setRegisterModalOpen,
-  setLoginModalOpen,
+  openRegisterModal,
+  openLoginModal,
 }) {
   const { currentUser } = useContext(CurrentUserContext);
   const currentDate = new Date().toLocaleString("default", {
@@ -56,16 +56,10 @@ function Header({
           </>
         ) : (
           <div className="header__auth-buttons">
-            <button
-              onClick={() => setRegisterModalOpen(true)}
-              className="header__button"
-            >
+            <button onClick={openRegisterModal} className="header__button">
               Sign up
             </button>
-            <button
-              onClick={() => setLoginModalOpen(true)}
-              className="header__button"
-            >
+            <button onClick={openLoginModal} className="header__button">
               Log in
             </button>
           </div>

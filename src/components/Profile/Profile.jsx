@@ -5,6 +5,7 @@ import SideBar from "../SideBar/SideBar";
 import ClothesSection from "../ClothesSection/ClothesSection";
 import EditProfileModal from "../EditProfileModal/EditProfileModal";
 import { useNavigate } from "react-router-dom";
+import { updateUserProfile } from "../../utils/api";
 
 function Profile({
   onCardClick,
@@ -14,6 +15,8 @@ function Profile({
   onUpdateSuccess,
   onCardLike,
   isLoggedIn,
+  isLoading,
+  updateUserProfile,
 }) {
   // const { currentUser, setCurrentUser } = useContext(CurrentUserContext);
   const [isEditProfileModalOpen, setIsEditProfileModalOpen] = useState(false);
@@ -54,6 +57,8 @@ function Profile({
         isOpen={isEditProfileModalOpen}
         onClose={() => setIsEditProfileModalOpen(false)}
         onUpdateSuccess={onUpdateSuccess}
+        updateUserProfile={updateUserProfile}
+        isLoading={isLoading}
       />
     </div>
   );

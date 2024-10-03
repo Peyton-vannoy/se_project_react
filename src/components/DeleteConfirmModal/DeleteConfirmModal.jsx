@@ -3,7 +3,7 @@ import closeItemIcon from "../../images/modal-close-btn.svg";
 
 function DeleteConfirmModal({ isOpen, handleCloseClick, onDelete, card }) {
   return (
-    <div className={`modal ${isOpen === "delete-garment" && "modal_opened"}`}>
+    <div className={`modal ${isOpen ? "modal_opened" : ""}`}>
       <div className="modal__content modal_content_type_delete">
         <button
           onClick={handleCloseClick}
