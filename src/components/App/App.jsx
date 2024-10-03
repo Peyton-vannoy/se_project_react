@@ -108,7 +108,7 @@ function App() {
       setCurrentUser({ name, avatar, _id });
       fetchClothingItems();
       navigate("/profile");
-      // console.log("User data after login", { email, name, avatar, _id });
+      console.log("User data after login", { email, name, avatar, _id });
       return Promise.resolve();
     };
     handleSubmit(makeRequest);
@@ -127,22 +127,17 @@ function App() {
   };
 
   const updateUserProfile = ({ name, avatar }) => {
-    setIsLoading(true);
-    return api
-      .updateUserProfile({ name, avatar })
-      .then((res) => {
+    const makeRequest = () => {
+      return api.updateUserProfile({ name, avatar }).then((res) => {
         setCurrentUser((prevUser) => ({
           ...prevUser,
           name: res.data.name,
           avatar: res.data.avatar,
         }));
         return res;
-      })
-      .catch((err) => {
-        console.error("Error updating profile", err);
-        throw err;
-      })
-      .finally(() => setIsLoading(false));
+      });
+    };
+    handleSubmit(makeRequest);
   };
 
   // Item Handlers
@@ -156,14 +151,12 @@ function App() {
   };
 
   const fetchClothingItems = () => {
-    api
-      .getItems()
-      .then(({ data }) => {
+    const makeRequest = () => {
+      return api.getItems().then(({ data }) => {
         setClothingItems(data);
-      })
-      .catch((err) => {
-        console.error("Error fetching clothing items", err);
       });
+    };
+    handleSubmit(makeRequest);
   };
 
   const handleDeleteItem = (item) => {

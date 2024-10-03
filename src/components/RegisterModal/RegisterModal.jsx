@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+
 import ModalWithForm from "../ModalWithForm/ModalWithForm";
 import "./RegisterModal";
 import "./RegisterModal.css";
@@ -14,8 +15,6 @@ function RegisterModal({
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [avatar, setAvatar] = useState("");
-
-  const isFormValid = email && password && name && avatar;
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
@@ -46,7 +45,6 @@ function RegisterModal({
       buttonText="Sign Up"
       onSubmit={handleFormSubmit}
       onClose={onClose}
-      disabled={!isFormValid}
     >
       <label className="modal__label" htmlFor="email">
         Email*

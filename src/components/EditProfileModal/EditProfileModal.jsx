@@ -1,7 +1,6 @@
 import React, { useState, useContext, useEffect } from "react";
 import { CurrentUserContext } from "../../contexts/CurrentUserContext";
 import ModalWithForm from "../ModalWithForm/ModalWithForm";
-import * as api from "../../utils/api";
 
 function EditProfileModal({
   isOpen,
