@@ -1,14 +1,8 @@
 .page {
-  display: flex;
-  flex-direction: column;
   background-color: #f3f3f3;
-  min-height: 100vh;
 }
 
 .page__content {
-  display: flex;
-  flex-direction: column;
-  flex: 1;
   max-width: 1360px;
   margin: 0 auto;
   padding: 0 20px;
