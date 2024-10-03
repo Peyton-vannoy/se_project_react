@@ -97,6 +97,7 @@ function App() {
 
     setIsLoggedIn(true);
     setCurrentUser({ name, avatar, _id });
+    fetchClothingItems();
     navigate("/profile");
     console.log("User data after login", { email, name, avatar });
   };
@@ -145,6 +146,18 @@ function App() {
       });
   };
 
+  const fetchClothingItems = () => {
+    api
+      .getItems()
+      .then(({ data }) => {
+        console.log("Fetched Clothing Items:", data);
+        setClothingItems(data);
+      })
+      .catch((err) => {
+        console.error("Error fetching clothing items", err);
+      });
+  };
+
   const handleDeleteItem = (item) => {
     if (!item || !item._id) {
       console.error("Invalid item for deletion", item);
@@ -181,11 +194,17 @@ function App() {
 
     const apiCall = isLiked ? api.removeCardLike : api.addCardLike;
 
-    apiCall({ itemId }).then((updatedItem) => {
-      setClothingItems((prevItems) =>
-        prevItems.map((item) => (item._id === itemId ? updatedItem.data : item))
-      );
-    });
+    apiCall({ itemId })
+      .then((updatedItem) => {
+        setClothingItems((prevItems) =>
+          prevItems.map((item) =>
+            item._id === itemId ? updatedItem.data : item
+          )
+        );
+      })
+      .catch((err) => {
+        console.error("Error updating like status", err);
+      });
   };
 
   // Effects
@@ -216,15 +235,10 @@ function App() {
   }, []);
 
   useEffect(() => {
-    api
-      .getItems()
-      .then(({ data }) => {
-        setClothingItems(data);
-      })
-      .catch((err) => {
-        console.error("Error fetching clothing items", err);
-      });
-  }, []);
+    if (isLoggedIn) {
+      fetchClothingItems();
+    }
+  }, [isLoggedIn]);
 
   useEffect(() => {
     const token = localStorage.getItem("jwt");

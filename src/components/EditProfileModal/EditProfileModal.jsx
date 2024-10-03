@@ -37,30 +37,30 @@ function EditProfileModal({ isOpen, onClose, updateUserProfile, isLoading }) {
     >
       <label className="modal__label" htmlFor="name">
         Name*
+        <input
+          name="name"
+          className="modal__input"
+          type="text"
+          id="name"
+          placeholder="Name"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          required
+        />
       </label>
-      <input
-        name="name"
-        className="modal__input"
-        type="text"
-        id="name"
-        placeholder="Name"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-        required
-      />
       <label className="modal__label" htmlFor="avatar">
         Avatar*
+        <input
+          className="modal__input"
+          name="avatar"
+          type="url"
+          id="avatar"
+          placeholder="Avatar URL"
+          value={avatar}
+          onChange={(e) => setAvatar(e.target.value)}
+          required
+        />
       </label>
-      <input
-        className="modal__input"
-        name="avatar"
-        type="url"
-        id="avatar"
-        placeholder="Avatar URL"
-        value={avatar}
-        onChange={(e) => setAvatar(e.target.value)}
-        required
-      />
     </ModalWithForm>
   );
 }

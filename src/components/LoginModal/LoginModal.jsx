@@ -35,28 +35,28 @@ function LoginModal({ isOpen, onClose, onLoginSuccess, openRegisterModal }) {
     >
       <label className="modal__label" htmlFor="email">
         Email*
+        <input
+          name="email"
+          className="modal__input"
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+        />
       </label>
-      <input
-        name="email"
-        className="modal__input"
-        type="email"
-        placeholder="Email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        required
-      />
       <label className="modal__label" htmlFor="password">
         Password*
+        <input
+          name="password"
+          className="modal__input"
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+        />
       </label>
-      <input
-        name="password"
-        className="modal__input"
-        type="password"
-        placeholder="Password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        required
-      />
       <button
         type="button"
         className="modal__register-btn"
