@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Routes, Route, useNavigate } from "react-router-dom";
 import "./App.css";
 import { coordinates, APIkey } from "../../utils/constants";
@@ -41,6 +41,9 @@ function App() {
   });
   const [itemToDelete, setItemToDelete] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+
+  const fetchedRef = useRef(false);
+  const weatherFetchedRef = useRef(false);
 
   const handleSubmit = (request) => {
     setIsLoading(true);
@@ -215,14 +218,17 @@ function App() {
   }, [activeModal]);
 
   useEffect(() => {
-    getWeather(coordinates, APIkey)
-      .then((data) => {
-        const filteredData = filterWeatherData(data);
-        setWeatherData(filteredData);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    if (!weatherFetchedRef.current) {
+      getWeather(coordinates, APIkey)
+        .then((data) => {
+          const filteredData = filterWeatherData(data);
+          setWeatherData(filteredData);
+          weatherFetchedRef.current = true;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
   }, []);
 
   useEffect(() => {
@@ -236,13 +242,17 @@ function App() {
             avatar: data.data.avatar,
             _id: data.data._id,
           });
+          return fetchClothingItems();
         })
         .catch(() => localStorage.removeItem("jwt"));
     }
   }, []);
 
   useEffect(() => {
-    fetchClothingItems();
+    if (!fetchedRef.current) {
+      fetchClothingItems();
+      fetchedRef.current = true;
+    }
   }, [currentUser]);
 
   useEffect(() => {

@@ -1,4 +1,4 @@
-const baseUrl = "http://localhost:3001";
+import { BASE_URL } from "./constants";
 
 const handleServerResponse = (res) => {
   return res.ok ? res.json() : Promise.reject(`Error: ${res.status}`);
@@ -14,11 +14,11 @@ const fetchWithToken = (url, options) => {
 };
 
 function getItems() {
-  return fetch(`${baseUrl}/items`).then(handleServerResponse);
+  return fetch(`${BASE_URL}/items`).then(handleServerResponse);
 }
 
 function addItem({ name, imageUrl, weather }) {
-  return fetchWithToken(`${baseUrl}/items`, {
+  return fetchWithToken(`${BASE_URL}/items`, {
     method: "POST",
     body: JSON.stringify({
       name,
@@ -29,14 +29,14 @@ function addItem({ name, imageUrl, weather }) {
 }
 
 function deleteItem(id) {
-  return fetchWithToken(`${baseUrl}/items/${id}`, {
+  return fetchWithToken(`${BASE_URL}/items/${id}`, {
     method: "DELETE",
   });
 }
 
 function updateUserProfile({ name, avatar }) {
   const token = localStorage.getItem("jwt");
-  return fetch(`${baseUrl}/users/me`, {
+  return fetch(`${BASE_URL}/users/me`, {
     method: "PATCH",
     headers: {
       "Content-Type": "application/json",
@@ -47,13 +47,13 @@ function updateUserProfile({ name, avatar }) {
 }
 
 function addCardLike({ itemId }) {
-  return fetchWithToken(`${baseUrl}/items/${itemId}/likes`, {
+  return fetchWithToken(`${BASE_URL}/items/${itemId}/likes`, {
     method: "PUT",
   });
 }
 
 function removeCardLike({ itemId }) {
-  return fetchWithToken(`${baseUrl}/items/${itemId}/likes`, {
+  return fetchWithToken(`${BASE_URL}/items/${itemId}/likes`, {
     method: "DELETE",
   });
 }
@@ -67,5 +67,4 @@ export {
   addCardLike,
   removeCardLike,
   fetchWithToken,
-  baseUrl,
 };

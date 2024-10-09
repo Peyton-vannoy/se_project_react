@@ -116,3 +116,8 @@ export const coordinates = {
 };
 
 export const APIkey = "aa349b275e40ecec32b44bdec896b2a9";
+
+export const BASE_URL =
+  process.env.NODE_ENV === "production"
+    ? "https://api.wtwr.ohbah.com"
+    : "http://localhost:3001";
