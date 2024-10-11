@@ -1,5 +1,7 @@
 # WTWR (What to Wear?) 🧥☀️❄️
 
+Domain name: [https://wtwr.ohbah.com](https://wtwr.ohbah.com)
+
 ## Your Personal Weather-Based Wardrobe Assistant
 
 WTWR is an innovative application that takes the guesswork out of dressing for the weather. By combining real-time weather data with your personal wardrobe, WTWR suggests the perfect outfit for any day, any weather, anywhere.
@@ -49,7 +51,7 @@ WTWR is an innovative application that takes the guesswork out of dressing for t
    cd se_project_react && npm run dev
    ```
 
-6. Open your browser and navigate to `http://localhost:3000`. Welcome to WTWR!
+6. Open your browser and navigate to `https://wtwr.ohbah.com`. Welcome to WTWR!
 
 ## 📸 Screenshots
 
