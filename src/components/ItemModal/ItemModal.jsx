@@ -36,7 +36,7 @@ function ItemModal({
           <div className="modal__footer">
             <h2 className="modal__caption">{card.name}</h2>
             <p className="modal__weather">Weather: {card.weather}</p>
-            {isLoggedIn && currentUser._id === card.owner && (
+            {isLoggedIn && isOwn && (
               <button
                 type="button"
                 className={itemDeleteButtonClassName}
