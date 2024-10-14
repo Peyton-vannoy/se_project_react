@@ -62,11 +62,3 @@
   color: #ff4d00;
   cursor: pointer;
 }
-
-.item__delete-button_hidden {
-  display: none;
-}
-
-.item__delete-button_visible {
-  display: visible;
-}
