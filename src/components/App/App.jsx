@@ -146,7 +146,7 @@ function App() {
   // Item Handlers
   const onAddItem = (values) => {
     const makeRequest = () => {
-      return api.addItem(values).then((item) => {
+      return api.addItem({ ...values, owner: currentUser._id }).then((item) => {
         setClothingItems((prevItems) => [item.data, ...prevItems]);
       });
     };
