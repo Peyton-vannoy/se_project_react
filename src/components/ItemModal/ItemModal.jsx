@@ -13,14 +13,6 @@ function ItemModal({
   const currentUser = useContext(CurrentUserContext);
   const isOwn = card.owner === currentUser?._id;
 
-  // Debugging logs
-  console.log("Current User:", currentUser);
-  console.log("Current User ID:", currentUser?._id);
-  console.log("Card:", card);
-  console.log("Card Owner:", card.owner);
-  console.log("Is Own:", isOwn);
-  console.log("Is Logged In:", isLoggedIn);
-
   const itemDeleteButtonClassName = `item__delete-button ${
     isOwn ? "item__delete-button_visible" : "item__delete-button_hidden"
   }`;
@@ -44,7 +36,7 @@ function ItemModal({
           <div className="modal__footer">
             <h2 className="modal__caption">{card.name}</h2>
             <p className="modal__weather">Weather: {card.weather}</p>
-            {isLoggedIn && isOwn && (
+            {isLoggedIn && (
               <button
                 type="button"
                 className={itemDeleteButtonClassName}
