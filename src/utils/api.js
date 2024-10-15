@@ -18,12 +18,14 @@ function getItems() {
 }
 
 function addItem({ name, imageUrl, weather }) {
+  const currentUser = localStorage.getItem("currentUser");
   return fetchWithToken(`${BASE_URL}/items`, {
     method: "POST",
     body: JSON.stringify({
       name,
       imageUrl,
       weather,
+      owner: currentUser._id,
     }),
   });
 }
