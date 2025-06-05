@@ -63,7 +63,7 @@ _Easily manage your virtual wardrobe_
 
 ## 📞 Contact
 
-Peyton Vannoy - [vannoypeyton819@gmail.com](mailto:vannoypeyton819@gmail.com)
+Peyton Vannoy - [peyton.vannoy1999@gmail.com](mailto:vannoypeyton819@gmail.com)
 
 Project Links:
 
